@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>새내기 학업 플래너 & Excel 시트 | 26학번 전용</title>
+  <!-- Pretendard Font for Modern Korean Typography -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <!-- FontAwesome Icons for Premium Look -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+
+    :root {
+      /* Common System Colors */
+      --excel-green: #107c41;
+      --excel-green-dark: #0a4d29;
+      --excel-green-light: #e1f2e9;
+      --bg-app: #f3f2f1;
+      --bg-card: #ffffff;
+      --text-main: #323130;
+      --text-sub: #605e5c;
+      --text-white: #ffffff;
+      --border-color: #d2d0ce;
+      --border-light: #edebe9;
+      --excel-grid: #e1dfdd;
+      --excel-header-bg: #f3f2f1;
+      --excel-header-text: #323130;
+      --active-cell-border: #107c41;
+      --selected-row-bg: #f3f9f5;
+      
+      /* Status Colors */
+      --status-not-started-bg: #f3f2f1;
+      --status-not-started-text: #605e5c;
+      --status-in-progress-bg: #fff4ce;
+      --status-in-progress-text: #795700;
+      --status-completed-bg: #dff6dd;
+      --status-completed-text: #107c41;
+      --status-exam-bg: #fde7e9;
+      --status-exam-text: #a80000;
+      
+      /* Shadow & Transitions */
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s ease;
+    }
+
+    /* Theme 1: Classic Excel (Default) */
+    body.theme-excel {
+      --bg-app: #f3f2f1;
+      --bg-card: #ffffff;
+      --text-main: #323130;
+      --text-sub: #605e5c;
+      --active-cell-border: #107c41;
+      --selected-row-bg: #f3f9f5;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+    }
+
+    /* Theme 2: Freshman Pastel (Cotton Candy) */
+    body.theme-pastel {
+      --excel-green: #90b4fc;
+      --excel-green-dark: #5e8cf6;
+      --excel-green-light: #edf3ff;
+      --bg-app: #f7f9fc;
+      --bg-card: #ffffff;
+      --text-main: #2b3952;
+      --text-sub: #6c7d9c;
+      --border-color: #dce4f2;
+      --border-light: #f1f4fa;
+      --excel-grid: #e2eaf5;
+      --excel-header-bg: #f0f4fa;
+      --active-cell-border: #5e8cf6;
+      --selected-row-bg: #f2f7ff;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+    }
+    body.theme-pastel .app-header {
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+      color: #1a2a47;
+    }
+    body.theme-pastel .app-header .logo-icon {
+      color: #1a2a47;
+    }
+    body.theme-pastel .logo-text .sub-text {
+      color: #3b4d6b;
+    }
+    body.theme-pastel .btn-primary {
+      background-color: #5e8cf6;
+    }
+    body.theme-pastel .btn-primary:hover {
+      background-color: #4075ec;
+    }
+    body.theme-pastel .kpi-card {
+      border-top: 4px solid #a1c4fd;
+    }
+    body.theme-pastel .kpi-card#kpi-gpa-card { border-top-color: #fbc2eb; }
+    body.theme-pastel .kpi-card#kpi-credits-card { border-top-color: #a6c0fe; }
+    body.theme-pastel .kpi-card#kpi-tasks-card { border-top-color: #84fab0; }
+    body.theme-pastel .kpi-card#kpi-bucket-card { border-top-color: #ff9a9e; }
+    body.theme-pastel .progress-bar-fill {
+      background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
+    }
+
+    /* Theme 3: Dark Slate */
+    body.theme-dark {
+      --bg-app: #121214;
+      --bg-card: #1e1e24;
+      --text-main: #e3e3e6;
+      --text-sub: #9ea0a5;
+      --border-color: #383a40;
+      --border-light: #2d2f34;
+      --excel-grid: #2e3035;
+      --excel-header-bg: #2b2d31;
+      --excel-header-text: #e3e3e6;
+      --active-cell-border: #3880ff;
+      --selected-row-bg: #1e293b;
+      --status-not-started-bg: #2d3139;
+      --status-not-started-text: #9ea0a5;
+      --status-in-progress-bg: #4a3e1b;
+      --status-in-progress-text: #ffcf44;
+      --status-completed-bg: #1c3d27;
+      --status-completed-text: #4ade80;
+      --status-exam-bg: #4c1d1d;
+      --status-exam-text: #fca5a5;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+    }
+    body.theme-dark .app-header {
+      background-color: #1a1a1f;
+      border-bottom: 1px solid var(--border-color);
+    }
+    body.theme-dark .control-select, 
+    body.theme-dark .control-select-sm, 
+    body.theme-dark .btn-secondary {
+      background-color: #2b2d31;
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+    body.theme-dark .control-select:hover, 
+    body.theme-dark .btn-secondary:hover {
+      background-color: #35373c;
+    }
+    body.theme-dark .formula-bar-container {
+      background-color: #1a1a1f;
+      border-bottom: 1px solid var(--border-color);
+    }
+    body.theme-dark .formula-cell-indicator {
+      background-color: #2b2d31;
+      border-right: 1px solid var(--border-color);
+    }
+    body.theme-dark .formula-input {
+      color: var(--text-main);
+    }
+    body.theme-dark .excel-table td input {
+      color: var(--text-main);
+      background: transparent;
+    }
+    body.theme-dark .excel-table td.editing {
+      background-color: #252830 !important;
+    }
+    body.theme-dark .kpi-card {
+      background-color: var(--bg-card);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+    }
+    body.theme-dark .timetable-grid th {
+      background-color: #25272a;
+    }
+    body.theme-dark .timetable-grid td.time-label {
+      background-color: #25272a;
+    }
+    body.theme-dark #free-notes {
+      background-color: #151518;
+      color: #e3e3e6;
+      border-color: var(--border-color);
+    }
+    body.theme-dark .sheet-tab {
+      background-color: #202024;
+      border-right-color: #2d2f34;
+    }
+    body.theme-dark .sheet-tab.active {
+      background-color: var(--bg-card);
+      color: #3880ff;
+      border-top-color: #3880ff;
+    }
+
+    /* Theme 4: Sunset Glow */
+    body.theme-sunset {
+      --excel-green: #f36c3f;
+      --excel-green-dark: #b84b25;
+      --excel-green-light: #fff0eb;
+      --bg-app: #faf6f0;
+      --bg-card: #ffffff;
+      --text-main: #4d3d34;
+      --text-sub: #877468;
+      --border-color: #eddcd2;
+      --border-light: #f7e9e1;
+      --excel-grid: #eddcd2;
+      --excel-header-bg: #f8ebe4;
+      --active-cell-border: #f36c3f;
+      --selected-row-bg: #fff6f2;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+    }
+    body.theme-sunset .app-header {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+      color: #5c2c36;
+    }
+    body.theme-sunset .app-header .logo-icon {
+      color: #5c2c36;
+    }
+    body.theme-sunset .btn-primary {
+      background-color: #f36c3f;
+    }
+    body.theme-sunset .btn-primary:hover {
+      background-color: #d25025;
+    }
+    body.theme-sunset .kpi-card {
+      border-top: 4px solid #fecfef;
+    }
+    body.theme-sunset .kpi-card#kpi-gpa-card { border-top-color: #ff9a9e; }
+    body.theme-sunset .kpi-card#kpi-credits-card { border-top-color: #f9d423; }
+    body.theme-sunset .kpi-card#kpi-tasks-card { border-top-color: #ff9a9e; }
+    body.theme-sunset .kpi-card#kpi-bucket-card { border-top-color: #fecfef; }
+    body.theme-sunset .progress-bar-fill {
+      background: linear-gradient(90deg, #ff9a9e, #fecfef);
+    }
+
+    /* App Container Layout */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      min-width: 1024px;
+      overflow: hidden;
+    }
+
+    /* Header styling */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: var(--excel-green-dark);
+      color: var(--text-white);
+      height: 60px;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+      z-index: 10;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 1.8rem;
+      color: var(--text-white);
+    }
+
+    .logo-text h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text .sub-text {
+      font-size: 0.75rem;
+      opacity: 0.85;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .control-select {
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.15);
+      color: var(--text-white);
+      font-size: 0.8rem;
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .control-select option {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    .control-select-sm {
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.75rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background-color: var(--excel-green);
+      color: var(--text-white);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--excel-green-dark);
+    }
+
+    .btn-secondary {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: var(--text-white);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-danger {
+      background-color: #e81123;
+      color: var(--text-white);
+    }
+
+    .btn-danger:hover {
+      background-color: #c70e1c;
+    }
+
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 3px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .btn-sm.btn-success {
+      background-color: var(--excel-green);
+      color: var(--text-white);
+    }
+    .btn-sm.btn-success:hover {
+      background-color: var(--excel-green-dark);
+    }
+
+    .btn-sm.btn-danger {
+      background-color: #fde7e9;
+      color: #a80000;
+      border-color: #fde7e9;
+    }
+    .btn-sm.btn-danger:hover {
+      background-color: #fbc2c4;
+    }
+
+    .btn-sm.btn-primary {
+      background-color: #0078d4;
+      color: var(--text-white);
+    }
+    .btn-sm.btn-primary:hover {
+      background-color: #005a9e;
+    }
+
+    /* Dashboard Panel */
+    .dashboard-section {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 15px;
+      padding: 15px;
+      background-color: var(--bg-app);
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .freshman-welcome-card {
+      background-color: var(--bg-card);
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+
+    .welcome-avatar {
+      background-color: var(--excel-green-light);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .welcome-avatar .emoji {
+      font-size: 1.8rem;
+    }
+
+    .welcome-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .welcome-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .welcome-quote {
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .welcome-dday-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background-color: #fde7e9;
+      color: #a80000;
+      padding: 2px 6px;
+      border-radius: 3px;
+      width: fit-content;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .kpi-card {
+      background-color: var(--bg-card);
+      border-radius: 6px;
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      border-top: 4px solid var(--excel-green);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .kpi-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .kpi-icon {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+    }
+
+    .kpi-value-wrapper {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .kpi-max {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    .kpi-footer {
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .kpi-trend {
+      font-weight: 600;
+    }
+    .kpi-trend.positive { color: var(--excel-green); }
+    .kpi-trend.negative { color: #a80000; }
+    .kpi-subtext { color: var(--text-sub); }
+
+    .progress-bar-container {
+      background-color: var(--border-light);
+      height: 6px;
+      border-radius: 3px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background-color: var(--excel-green);
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    /* Formula Bar Styling */
+    .formula-bar-container {
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      height: 36px;
+      flex-shrink: 0;
+      z-index: 5;
+    }
+
+    .formula-cell-indicator {
+      width: 60px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      border-right: 1px solid var(--border-light);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--excel-header-bg);
+    }
+
+    .formula-fx-icon {
+      width: 30px;
+      text-align: center;
+      font-style: italic;
+      font-family: 'Georgia', serif;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #737373;
+      user-select: none;
+    }
+
+    .formula-input {
+      flex-grow: 1;
+      border: none;
+      outline: none;
+      font-size: 0.8rem;
+      padding: 0 10px;
+      height: 100%;
+      color: var(--text-main);
+      background-color: transparent;
+    }
+
+    .formula-info {
+      padding: 0 12px;
+      color: #a19f9d;
+      font-size: 0.85rem;
+      cursor: help;
+    }
+
+    /* Sheet Workspace */
+    .sheet-workspace {
+      flex-grow: 1;
+      background-color: #ffffff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sheet-content {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+    }
+
+    .sheet-content.active {
+      display: flex;
+    }
+
+    .sheet-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 15px;
+      background-color: var(--excel-header-bg);
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+      font-size: 0.78rem;
+    }
+
+    .toolbar-title {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-main);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toolbar-tip {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .table-container {
+      flex-grow: 1;
+      overflow: auto;
+      position: relative;
+    }
+
+    /* Excel Style Grid Table */
+    .excel-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.78rem;
+      table-layout: fixed;
+      background-color: var(--bg-card);
+    }
+
+    .excel-table th, .excel-table td {
+      border: 1px solid var(--excel-grid);
+      height: 28px;
+      padding: 0 8px;
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Headers style (A, B, C, Row numbers) */
+    .excel-table th {
+      background-color: var(--excel-header-bg);
+      color: var(--excel-header-text);
+      font-weight: 500;
+      text-align: center;
+      user-select: none;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .row-num-col {
+      width: 35px;
+      background-color: var(--excel-header-bg);
+      text-align: center;
+      font-weight: 500;
+      color: var(--text-sub);
+      user-select: none;
+      position: sticky;
+      left: 0;
+      z-index: 3;
+      border-right: 2px solid var(--border-color);
+    }
+
+    .excel-table tbody tr td:first-child {
+      background-color: var(--excel-header-bg);
+      color: var(--text-sub);
+      text-align: center;
+      font-weight: 500;
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      border-right: 2px solid var(--border-color);
+      user-select: none;
+    }
+
+    .excel-table tbody tr:hover {
+      background-color: var(--selected-row-bg) !important;
+    }
+
+    .excel-table td {
+      cursor: cell;
+    }
+
+    /* Excel Interactive cell styles */
+    .excel-table td.selected {
+      outline: 2px solid var(--active-cell-border);
+      outline-offset: -2px;
+      z-index: 4;
+    }
+
+    .excel-table td.editing {
+      outline: 2px solid var(--active-cell-border);
+      outline-offset: -2px;
+      background-color: #ffffff !important;
+      padding: 0;
+    }
+
+    .excel-table td input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      padding: 0 8px;
+      font-size: 0.78rem;
+      font-family: inherit;
+    }
+
+    .excel-table td select {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      padding: 0 4px;
+      font-size: 0.78rem;
+      font-family: inherit;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    /* Column specifics & align */
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-left { text-align: left; }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .status-badge.not-started {
+      background-color: var(--status-not-started-bg);
+      color: var(--status-not-started-text);
+    }
+
+    .status-badge.in-progress {
+      background-color: var(--status-in-progress-bg);
+      color: var(--status-in-progress-text);
+    }
+
+    .status-badge.completed {
+      background-color: var(--status-completed-bg);
+      color: var(--status-completed-text);
+    }
+
+    .status-badge.exam {
+      background-color: var(--status-exam-bg);
+      color: var(--status-exam-text);
+    }
+
+    /* Summary row */
+    .summary-row td {
+      background-color: var(--excel-header-bg);
+      border-top: 2px solid var(--border-color);
+      border-bottom: 2px double var(--border-color);
+      height: 32px;
+    }
+
+    /* Timetable Grid CSS */
+    .timetable-wrapper {
+      flex-grow: 1;
+      overflow: auto;
+      padding: 15px;
+      background-color: var(--bg-app);
+    }
+
+    .timetable-grid {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: var(--bg-card);
+      box-shadow: var(--shadow-sm);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      table-layout: fixed;
+    }
+
+    .timetable-grid th, .timetable-grid td {
+      border: 1px solid var(--border-light);
+      height: 52px;
+      vertical-align: middle;
+      text-align: center;
+      position: relative;
+    }
+
+    .timetable-grid th {
+      background-color: var(--excel-green-light);
+      color: var(--excel-green-dark);
+      font-weight: 700;
+      font-size: 0.8rem;
+      height: 40px;
+    }
+
+    .timetable-grid .time-col {
+      width: 120px;
+      background-color: var(--excel-header-bg);
+      border-right: 1px solid var(--border-color);
+    }
+
+    .timetable-grid .time-label {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      background-color: var(--excel-header-bg);
+      border-right: 1px solid var(--border-color);
+    }
+
+    /* Dynamic Timetable Card */
+    .timetable-subject-card {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-size: 0.72rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      font-weight: 600;
+      transition: transform var(--transition-fast);
+      z-index: 1;
+    }
+
+    .timetable-subject-card:hover {
+      transform: scale(1.02);
+      z-index: 2;
+      box-shadow: var(--shadow-md);
+    }
+
+    .timetable-subject-card .subject-name {
+      color: #2b3952;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .timetable-subject-card .subject-room {
+      font-size: 0.65rem;
+      color: rgba(43, 57, 82, 0.7);
+      font-weight: 500;
+    }
+
+    /* Beautiful pastel backgrounds for timetable cards */
+    .subject-color-0 { background-color: #ffd8d8; border-left: 4px solid #ff7b7b; }
+    .subject-color-1 { background-color: #d8e5ff; border-left: 4px solid #7ea8ff; }
+    .subject-color-2 { background-color: #d5fcd0; border-left: 4px solid #7ae770; }
+    .subject-color-3 { background-color: #fcf1d0; border-left: 4px solid #f6d15a; }
+    .subject-color-4 { background-color: #f7d8ff; border-left: 4px solid #dc7eff; }
+    .subject-color-5 { background-color: #d8fbfd; border-left: 4px solid #6be2e8; }
+    .subject-color-6 { background-color: #ffecd8; border-left: 4px solid #ffa142; }
+    .subject-color-7 { background-color: #e5ffd8; border-left: 4px solid #94eb6c; }
+
+    /* Checklist & Notes Layout */
+    .flex-layout {
+      display: flex;
+      height: 100%;
+      overflow: hidden;
+      padding: 15px;
+      gap: 15px;
+      background-color: var(--bg-app);
+    }
+
+    .bucket-list-panel {
+      flex: 4;
+      background-color: var(--bg-card);
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .notes-panel {
+      flex: 3;
+      background-color: var(--bg-card);
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background-color: var(--excel-header-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 15px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .save-status {
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--excel-green);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Notes textarea */
+    #free-notes {
+      flex-grow: 1;
+      border: none;
+      resize: none;
+      outline: none;
+      padding: 15px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      background-color: var(--bg-card);
+      font-family: inherit;
+    }
+
+    /* Bucket list checkbox centering */
+    .bucket-checkbox {
+      transform: scale(1.15);
+      cursor: pointer;
+    }
+
+    .bucket-row-completed {
+      background-color: #fafbfc;
+      color: var(--text-sub);
+    }
+    .bucket-row-completed td:nth-child(4) {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    /* Excel Sheet Tabs Bar */
+    .sheet-tabs-bar {
+      display: flex;
+      align-items: center;
+      background-color: var(--excel-header-bg);
+      border-top: 1px solid var(--border-color);
+      height: 32px;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .tabs-scroll-btn {
+      width: 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-sub);
+      font-size: 0.65rem;
+      border-right: 1px solid var(--border-light);
+    }
+
+    .tabs-scroll-btn:hover {
+      background-color: var(--border-light);
+    }
+
+    .sheet-tabs-container {
+      display: flex;
+      height: 100%;
+      overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .sheet-tabs-container::-webkit-scrollbar {
+      display: none; /* Safari / Chrome */
+    }
+
+    .sheet-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 16px;
+      height: 100%;
+      border-right: 1px solid var(--border-light);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      cursor: pointer;
+      background-color: var(--excel-header-bg);
+      position: relative;
+      transition: var(--transition-fast);
+    }
+
+    .sheet-tab:hover {
+      background-color: var(--border-light);
+      color: var(--text-main);
+    }
+
+    .sheet-tab.active {
+      background-color: #ffffff;
+      color: var(--excel-green);
+      font-weight: 700;
+      height: calc(100% + 1px);
+      margin-top: -1px;
+      border-top: 3px solid var(--excel-green);
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    }
+
+    .status-bar-info {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      padding-right: 15px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-dot.green {
+      background-color: var(--excel-green);
+    }
+
+    .keyboard-tip {
+      border-left: 1px solid var(--border-color);
+      padding-left: 15px;
+    }
+
+    .version-label {
+      border-left: 1px solid var(--border-color);
+      padding-left: 15px;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-normal);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background-color: var(--bg-card);
+      border-radius: 6px;
+      padding: 20px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      transform: translateY(-20px);
+      transition: transform var(--transition-normal);
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: translateY(0);
+    }
+
+    .modal-box h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #a80000;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-box p {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Editable Profile Fields */
+    [contenteditable="true"] {
+      border-bottom: 1px dashed transparent;
+      padding: 2px 4px;
+      border-radius: 3px;
+      transition: background-color var(--transition-fast), border-bottom-color var(--transition-fast);
+    }
+
+    [contenteditable="true"]:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-bottom-color: var(--text-sub);
+    }
+
+    body.theme-dark [contenteditable="true"]:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-bottom-color: var(--text-sub);
+    }
+
+    [contenteditable="true"]:focus {
+      outline: none;
+      background-color: rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid var(--excel-green);
+    }
+
+    body.theme-dark [contenteditable="true"]:focus {
+      background-color: rgba(255, 255, 255, 0.12);
+      border-bottom-color: var(--active-cell-border);
+    }
+
+    .profile-dept {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    #profile-quote {
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* KPI editable target */
+    #kpi-credits-target {
+      cursor: text;
+      display: inline-block;
+    }
+
+    /* Print CSS */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+      
+      .app-header, 
+      .dashboard-section, 
+      .formula-bar-container, 
+      .sheet-tabs-bar, 
+      .sheet-toolbar,
+      .toolbar-actions,
+      .btn-group {
+        display: none !important;
+      }
+      
+      .app-container {
+        height: auto !important;
+        min-width: 100% !important;
+        overflow: visible !important;
+      }
+      
+      .sheet-workspace {
+        overflow: visible !important;
+        height: auto !important;
+      }
+      
+      .sheet-content {
+        display: none !important;
+      }
+      
+      .sheet-content.active {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      
+      .table-container {
+        overflow: visible !important;
+        height: auto !important;
+      }
+      
+      .excel-table {
+        border-collapse: collapse !important;
+      }
+      
+      .excel-table th, .excel-table td {
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
+        background-color: #ffffff !important;
+      }
+      
+      .timetable-wrapper {
+        padding: 0 !important;
+        background-color: #ffffff !important;
+      }
+      
+      .timetable-grid {
+        box-shadow: none !important;
+        border: 1px solid #000000 !important;
+      }
+      
+      .timetable-grid th, .timetable-grid td {
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
+        background-color: #ffffff !important;
+      }
+      
+      .timetable-subject-card {
+        border: 1px solid #555555 !important;
+        box-shadow: none !important;
+        background-color: #f0f0f0 !important;
+        color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+<body class="theme-excel">
+
+  <!-- Main Container -->
+  <div class="app-container">
+    
+    <!-- Top Action Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <i class="fa-solid fa-file-excel logo-icon"></i>
+        <div class="logo-text">
+          <h1>Freshman Planner 2026</h1>
+          <span class="sub-text">26학번 신입생 대학 생활 & 학업 관리 시스템</span>
+        </div>
+      </div>
+      
+      <!-- Quick Control Tools -->
+      <div class="header-controls">
+        <div class="theme-selector-wrapper">
+          <label for="theme-select"><i class="fa-solid fa-palette"></i> 테마 선택</label>
+          <select id="theme-select" class="control-select">
+            <option value="theme-excel">엑셀 클래식 (Classic Green)</option>
+            <option value="theme-pastel">새내기 솜사탕 (Cotton Candy)</option>
+            <option value="theme-dark">밤샘 공부 모드 (Dark Slate)</option>
+            <option value="theme-sunset">노을 감성 (Sunset Glow)</option>
+          </select>
+        </div>
+        
+        <div class="btn-group">
+          <button id="btn-export-csv" class="btn btn-secondary" title="현재 시트를 CSV 파일로 내보냅니다.">
+            <i class="fa-solid fa-file-csv"></i> Excel(CSV) 내보내기
+          </button>
+          <button id="btn-export-json" class="btn btn-secondary" title="전체 데이터를 백업(JSON)합니다.">
+            <i class="fa-solid fa-download"></i> 백업 다운로드
+          </button>
+          <button id="btn-import-json" class="btn btn-secondary" title="백업 파일(JSON)을 불러옵니다.">
+            <i class="fa-solid fa-upload"></i> 불러오기
+            <input type="file" id="file-input-json" accept=".json" style="display: none;">
+          </button>
+          <button id="btn-reset" class="btn btn-danger" title="모든 데이터를 초기화하고 기본 템플릿으로 되돌립니다.">
+            <i class="fa-solid fa-rotate-left"></i> 초기화
+          </button>
+          <button id="btn-print" class="btn btn-primary" title="인쇄 및 PDF 저장을 준비합니다.">
+            <i class="fa-solid fa-print"></i> 인쇄 / PDF
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Top KPI Dashboard -->
+    <section class="dashboard-section">
+      <div class="freshman-welcome-card">
+        <div class="welcome-avatar" id="welcome-avatar" tabindex="0" title="엔터 키로 이모지 변경" style="cursor: pointer;">
+          <span class="emoji" id="profile-emoji">🌸</span>
+        </div>
+        <div class="welcome-info">
+          <div class="profile-header">
+            <span class="profile-dept" id="profile-dept" tabindex="0" contenteditable="true" title="클릭/탭하여 학과 수정">전공 미지정 학과</span>
+          </div>
+          <h2 class="welcome-title" id="profile-name" tabindex="0" contenteditable="true" title="클릭/탭하여 이름 수정">26학번 새내기</h2>
+          <p class="welcome-quote" id="profile-quote" tabindex="0" contenteditable="true" title="클릭/탭하여 다짐 수정">"대학 생활의 첫 단추, 체계적인 계획으로 완벽하게 시작해 보세요."</p>
+          <div class="welcome-dday-badge" id="dashboard-dday">
+            <i class="fa-solid fa-hourglass-half"></i> 다가오는 일정 없음
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards Grid -->
+      <div class="kpi-grid">
+        <!-- KPI 1: GPA -->
+        <div class="kpi-card" id="kpi-gpa-card">
+          <div class="kpi-header">
+            <span class="kpi-title">이번 학기 평점 (GPA)</span>
+            <i class="fa-solid fa-graduation-cap kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-gpa-val">0.00</span>
+            <span class="kpi-max">/ 4.50</span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-trend positive" id="kpi-gpa-status">성적 입력 대기 중</span>
+          </div>
+        </div>
+
+        <!-- KPI 2: Credits -->
+        <div class="kpi-card" id="kpi-credits-card">
+          <div class="kpi-header">
+            <span class="kpi-title">신청 및 이수 학점</span>
+            <i class="fa-solid fa-book-open kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-credits-val">0</span>
+            <span class="kpi-max" id="kpi-credits-target" tabindex="0" contenteditable="true" title="클릭/탭하여 목표 학점 수정">/ 18 학점</span>
+          </div>
+          <div class="kpi-footer">
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="kpi-credits-progress" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3: Task Completion -->
+        <div class="kpi-card" id="kpi-tasks-card">
+          <div class="kpi-header">
+            <span class="kpi-title">학업 과제 진행률</span>
+            <i class="fa-solid fa-list-check kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-tasks-pct">0%</span>
+            <span class="kpi-max" id="kpi-tasks-ratio">(0/0 건)</span>
+          </div>
+          <div class="kpi-footer">
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="kpi-tasks-progress" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 4: Bucket list -->
+        <div class="kpi-card" id="kpi-bucket-card">
+          <div class="kpi-header">
+            <span class="kpi-title">새내기 버킷리스트</span>
+            <i class="fa-solid fa-wand-magic-sparkles kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-bucket-pct">0%</span>
+            <span class="kpi-max" id="kpi-bucket-ratio">(0/8 달성)</span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-subtext" id="kpi-bucket-message">한번 뿐인 1학년, 즐겁게!</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Excel-like Formula Bar -->
+    <div class="formula-bar-container">
+      <div class="formula-cell-indicator" id="active-cell-id">A1</div>
+      <div class="formula-fx-icon">fx</div>
+      <input type="text" id="formula-input" class="formula-input" placeholder="수식 또는 셀 내용 입력..." readonly>
+      <div class="formula-info">
+        <i class="fa-solid fa-info-circle" title="셀을 더블클릭하여 수정할 수 있으며, 이 포뮬러 바에서도 수정이 반영됩니다."></i>
+      </div>
+    </div>
+
+    <!-- Sheet Workspace Grid Area -->
+    <main class="sheet-workspace">
+      
+      <!-- SHEET 1: Syllabus & Tasks (과제 및 평가 계획) -->
+      <div id="sheet-syllabus" class="sheet-content active">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-table-list"></i> 수강 과목 및 평가/과제 계획표
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-sm btn-success" id="btn-add-syllabus-row">
+              <i class="fa-solid fa-plus"></i> 행 추가 (Add Row)
+            </button>
+            <button class="btn-sm btn-danger" id="btn-delete-syllabus-row">
+              <i class="fa-solid fa-trash-can"></i> 선택 행 삭제
+            </button>
+            <span class="toolbar-tip"><i class="fa-solid fa-lightbulb"></i> 더블클릭하여 셀을 직접 수정하세요. 요일/시간은 '월 1,2' 또는 '화 3,4' 형태로 입력하면 시간표에 반영됩니다.</span>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="excel-table" id="table-syllabus">
+            <thead>
+              <tr class="header-letters">
+                <th class="row-num-col"></th>
+                <th style="width: 50px;">No</th>
+                <th style="width: 140px;">과목명</th>
+                <th style="width: 100px;">이수구분</th>
+                <th style="width: 60px;">학점</th>
+                <th style="width: 100px;">요일 및 교시</th>
+                <th style="width: 110px;">교수명</th>
+                <th style="width: 160px;">평가/과제 항목</th>
+                <th style="width: 70px;">반영비율(%)</th>
+                <th style="width: 110px;">일정/마감일</th>
+                <th style="width: 80px;">D-Day</th>
+                <th style="width: 110px;">진행상황</th>
+                <th style="width: 80px;">취득점수</th>
+                <th>비고</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-syllabus">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHEET 2: Timetable (시각적 강의 시간표) -->
+      <div id="sheet-timetable" class="sheet-content">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-calendar-days"></i> 2026학년도 1학기 주간 시간표
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-sm btn-primary" id="btn-sync-timetable">
+              <i class="fa-solid fa-arrows-rotate"></i> 계획표 데이터와 동기화
+            </button>
+            <span class="toolbar-tip"><i class="fa-solid fa-circle-info"></i> '수강 과목 및 평가 계획표' 시트의 '요일 및 교시' 셀 정보가 자동으로 동기화됩니다.</span>
+          </div>
+        </div>
+
+        <div class="timetable-wrapper">
+          <table class="timetable-grid">
+            <thead>
+              <tr>
+                <th class="time-col">교시 / 시간</th>
+                <th>월요일 (MON)</th>
+                <th>화요일 (TUE)</th>
+                <th>수요일 (WED)</th>
+                <th>목요일 (THU)</th>
+                <th>금요일 (FRI)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-timetable">
+              <!-- Timetable rows for 1-9 periods (09:00 - 18:00) -->
+              <tr data-period="1">
+                <td class="time-label"><strong>1교시</strong><br>09:00 ~ 10:00</td>
+                <td data-day="월" data-period="1"></td>
+                <td data-day="화" data-period="1"></td>
+                <td data-day="수" data-period="1"></td>
+                <td data-day="목" data-period="1"></td>
+                <td data-day="금" data-period="1"></td>
+              </tr>
+              <tr data-period="2">
+                <td class="time-label"><strong>2교시</strong><br>10:00 ~ 11:00</td>
+                <td data-day="월" data-period="2"></td>
+                <td data-day="화" data-period="2"></td>
+                <td data-day="수" data-period="2"></td>
+                <td data-day="목" data-period="2"></td>
+                <td data-day="금" data-period="2"></td>
+              </tr>
+              <tr data-period="3">
+                <td class="time-label"><strong>3교시</strong><br>11:00 ~ 12:00</td>
+                <td data-day="월" data-period="3"></td>
+                <td data-day="화" data-period="3"></td>
+                <td data-day="수" data-period="3"></td>
+                <td data-day="목" data-period="3"></td>
+                <td data-day="금" data-period="3"></td>
+              </tr>
+              <tr data-period="4">
+                <td class="time-label"><strong>4교시</strong><br>12:00 ~ 13:00</td>
+                <td data-day="월" data-period="4"></td>
+                <td data-day="화" data-period="4"></td>
+                <td data-day="수" data-period="4"></td>
+                <td data-day="목" data-period="4"></td>
+                <td data-day="금" data-period="4"></td>
+              </tr>
+              <tr data-period="5">
+                <td class="time-label"><strong>5교시</strong><br>13:00 ~ 14:00</td>
+                <td data-day="월" data-period="5"></td>
+                <td data-day="화" data-period="5"></td>
+                <td data-day="수" data-period="5"></td>
+                <td data-day="목" data-period="5"></td>
+                <td data-day="금" data-period="5"></td>
+              </tr>
+              <tr data-period="6">
+                <td class="time-label"><strong>6교시</strong><br>14:00 ~ 15:00</td>
+                <td data-day="월" data-period="6"></td>
+                <td data-day="화" data-period="6"></td>
+                <td data-day="수" data-period="6"></td>
+                <td data-day="목" data-period="6"></td>
+                <td data-day="금" data-period="6"></td>
+              </tr>
+              <tr data-period="7">
+                <td class="time-label"><strong>7교시</strong><br>15:00 ~ 16:00</td>
+                <td data-day="월" data-period="7"></td>
+                <td data-day="화" data-period="7"></td>
+                <td data-day="수" data-period="7"></td>
+                <td data-day="목" data-period="7"></td>
+                <td data-day="금" data-period="7"></td>
+              </tr>
+              <tr data-period="8">
+                <td class="time-label"><strong>8교시</strong><br>16:00 ~ 17:00</td>
+                <td data-day="월" data-period="8"></td>
+                <td data-day="화" data-period="8"></td>
+                <td data-day="수" data-period="8"></td>
+                <td data-day="목" data-period="8"></td>
+                <td data-day="금" data-period="8"></td>
+              </tr>
+              <tr data-period="9">
+                <td class="time-label"><strong>9교시</strong><br>17:00 ~ 18:00</td>
+                <td data-day="월" data-period="9"></td>
+                <td data-day="화" data-period="9"></td>
+                <td data-day="수" data-period="9"></td>
+                <td data-day="목" data-period="9"></td>
+                <td data-day="금" data-period="9"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHEET 3: GPA Calculator (성적/학점 계산기) -->
+      <div id="sheet-gpa" class="sheet-content">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-calculator"></i> 예상 학점 및 평점(GPA) 계산기
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-sm btn-success" id="btn-add-gpa-row">
+              <i class="fa-solid fa-plus"></i> 과목 추가
+            </button>
+            <button class="btn-sm btn-danger" id="btn-delete-gpa-row">
+              <i class="fa-solid fa-trash-can"></i> 선택 행 삭제
+            </button>
+            <div class="gpa-standard-wrapper">
+              <label for="gpa-standard">만점 기준:</label>
+              <select id="gpa-standard" class="control-select-sm">
+                <option value="4.5">4.5 만점 (일반 대학)</option>
+                <option value="4.3">4.3 만점 (일부 대학)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="excel-table" id="table-gpa">
+            <thead>
+              <tr class="header-letters">
+                <th class="row-num-col"></th>
+                <th style="width: 50px;">No</th>
+                <th style="width: 250px;">과목명</th>
+                <th style="width: 130px;">이수구분</th>
+                <th style="width: 90px;">학점 (Credits)</th>
+                <th style="width: 110px;">성적등급 (Grade)</th>
+                <th style="width: 110px;">과목 평점 (GP)</th>
+                <th style="width: 110px;">Pass/Fail 여부</th>
+                <th>비고 (목표 성적 또는 각오)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-gpa">
+              <!-- GPA rows -->
+            </tbody>
+            <tfoot>
+              <tr class="summary-row">
+                <td></td>
+                <td colspan="3" style="text-align: right; font-weight: bold; padding-right: 15px;">합계 / 평균 평점:</td>
+                <td id="gpa-total-credits" style="font-weight: bold; text-align: center;">0</td>
+                <td></td>
+                <td id="gpa-avg-gpa" style="font-weight: bold; text-align: center; color: var(--excel-green-dark);">0.00</td>
+                <td></td>
+                <td style="font-style: italic; color: #7f8c8d; font-size: 0.85rem;" id="gpa-summary-note">학점을 모두 채우고 훌륭한 학기를 보내보세요! 🚀</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHEET 4: Freshman Bucketlist & Notes (새내기 라이프) -->
+      <div id="sheet-checklist" class="sheet-content">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-heart-circle-check"></i> 26학번 새내기 버킷리스트 & 개인 메모
+          </div>
+          <div class="toolbar-tip"><i class="fa-solid fa-wand-magic-sparkles"></i> 1학년 때 꼭 해보고 싶은 미션을 클릭해 달성해 보세요! 오른쪽 메모장은 마크다운과 텍스트 필기로 쓸 수 있는 자유 공간입니다.</div>
+        </div>
+
+        <div class="flex-layout">
+          <!-- Bucket List Panel (Excel grid style) -->
+          <div class="bucket-list-panel">
+            <div class="panel-header">
+              <i class="fa-solid fa-list-check"></i> 신입생 낭만 버킷리스트 10선
+            </div>
+            <table class="excel-table" id="table-bucket">
+              <thead>
+                <tr class="header-letters">
+                  <th class="row-num-col"></th>
+                  <th style="width: 80px;">달성 여부</th>
+                  <th style="width: 40px;">No</th>
+                  <th>미션 내용</th>
+                  <th style="width: 120px;">달성 날짜</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-bucket">
+                <!-- Statically generated bucket list rows with checkbox -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Free Note Panel -->
+          <div class="notes-panel">
+            <div class="panel-header">
+              <span><i class="fa-solid fa-pen-clip"></i> 새내기 비밀 메모장 (Auto-saved)</span>
+              <span class="save-status" id="notes-save-status"><i class="fa-solid fa-cloud-arrow-up"></i> 자동 저장됨</span>
+            </div>
+            <textarea id="free-notes" placeholder="여기에 오늘의 할 일, 교수님 면담 내용, 동아리 정보 등을 마음껏 기록해 보세요... ✍️"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Excel-style Bottom Sheet Tabs Bar -->
+    <footer class="sheet-tabs-bar">
+      <!-- Scroll indicator arrows -->
+      <div class="tabs-scroll-btn left"><i class="fa-solid fa-chevron-left"></i></div>
+      
+      <!-- Excel Sheet Tabs -->
+      <div class="sheet-tabs-container">
+        <div class="sheet-tab active" data-target="sheet-syllabus" tabindex="0">
+          <i class="fa-solid fa-table logo-icon"></i>
+          <span>수강과목 및 평가계획</span>
+        </div>
+        <div class="sheet-tab" data-target="sheet-timetable" tabindex="0">
+          <i class="fa-solid fa-calendar logo-icon"></i>
+          <span>강의 시간표</span>
+        </div>
+        <div class="sheet-tab" data-target="sheet-gpa" tabindex="0">
+          <i class="fa-solid fa-calculator logo-icon"></i>
+          <span>학점 계산기</span>
+        </div>
+        <div class="sheet-tab" data-target="sheet-checklist" tabindex="0">
+          <i class="fa-solid fa-heart logo-icon"></i>
+          <span>새내기 라이프</span>
+        </div>
+      </div>
+
+      <div class="tabs-scroll-btn right"><i class="fa-solid fa-chevron-right"></i></div>
+      
+      <!-- Excel-like Status Bar info -->
+      <div class="status-bar-info">
+        <div class="status-indicator">
+          <span class="status-dot green"></span>
+          <span>준비 완료 (Ready)</span>
+        </div>
+        <div class="keyboard-tip">
+          <span>더블클릭: 편집 | Esc: 취소 | Enter: 저장</span>
+        </div>
+        <div class="version-label">
+          <span>Excel v2026.1.0</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Custom Context Menu or cell editor container if needed -->
+  <!-- Simple popup modal for importing data -->
+  <div class="modal-overlay" id="modal-import-confirm">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-triangle-exclamation"></i> 데이터 불러오기 경고</h3>
+      <p>기존에 작성 중이던 모든 데이터가 지워지고 불러온 파일의 데이터로 대체됩니다. 계속하시겠습니까?</p>
+      <div class="modal-actions">
+        <button id="btn-import-confirm" class="btn btn-primary">예, 불러옵니다</button>
+        <button id="btn-import-cancel" class="btn btn-secondary">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript logic -->
+  <script>
+    // Global State
+    let state = {
+      theme: 'theme-excel',
+      gpaStandard: '4.5',
+      profile: {
+        emoji: '🌸',
+        name: '26학번 새내기',
+        dept: '전공 미지정 학과',
+        quote: '"대학 생활의 첫 단추, 체계적인 계획으로 완벽하게 시작해 보세요."',
+        targetCredits: 18
+      },
+      syllabusRows: [],
+      gpaRows: [],
+      bucketList: [],
+      notes: ''
+    };
+
+    // Default Templates
+    const defaultTemplates = {
+      profile: {
+        emoji: '🌸',
+        name: '26학번 새내기',
+        dept: '전공 미지정 학과',
+        quote: '"대학 생활의 첫 단추, 체계적인 계획으로 완벽하게 시작해 보세요."',
+        targetCredits: 18
+      },
+      syllabusRows: [
+        { id: 1, subject: '미적분학 1', type: '전공필수', credits: 3, schedule: '화 3,4 / 목 3', professor: '이진우 교수님', task: '중간고사', weight: 35, date: '2026-04-22', status: '완료', score: 92, notes: '기초 공식 암기 필수' },
+        { id: 2, subject: '미적분학 1', type: '전공필수', credits: 3, schedule: '화 3,4 / 목 3', professor: '이진우 교수님', task: '기말고사', weight: 40, date: '2026-06-18', status: '미시작', score: '', notes: '범위: 적분법 전체' },
+        { id: 3, subject: '일반물리학 1', type: '전공필수', credits: 3, schedule: '월 3,4 / 수 3', professor: '박성민 교수님', task: '실험 보고서 1', weight: 10, date: '2026-03-25', status: '완료', score: 95, notes: '오차 분석 꼼꼼히 쓰기' },
+        { id: 4, subject: '일반물리학 1', type: '전공필수', credits: 3, schedule: '월 3,4 / 수 3', professor: '박성민 교수님', task: '기말고사', weight: 40, date: '2026-06-22', status: '진행중', score: '', notes: 'D-day 관리 잘할 것' },
+        { id: 5, subject: '컴퓨터프로그래밍', type: '전공선택', credits: 3, schedule: '화 5,6', professor: '최윤석 교수님', task: '개인 프로젝트', weight: 30, date: '2026-06-15', status: '진행중', score: '', notes: '주제: C언어로 만든 미로 게임' },
+        { id: 6, subject: '컴퓨터프로그래밍', type: '전공선택', credits: 3, schedule: '화 5,6', professor: '최윤석 교수님', task: '기말 코딩테스트', weight: 40, date: '2026-06-25', status: '미시작', score: '', notes: '포인터, 구조체 위주 복습' },
+        { id: 7, subject: '대학 영어', type: '교양필수', credits: 2, schedule: '수 1,2', professor: 'Sarah Smith', task: '중간 에세이', weight: 20, date: '2026-04-18', status: '완료', score: 88, notes: '피드백 반영해서 수정 완료' },
+        { id: 8, subject: '대학 영어', type: '교양필수', credits: 2, schedule: '수 1,2', professor: 'Sarah Smith', task: '기말 발표 영상', weight: 20, date: '2026-06-20', status: '미시작', score: '', notes: '주제: 나의 대학 생활 계획' },
+        { id: 9, subject: '새내기 세미나', type: '일반선택', credits: 1, schedule: '금 5', professor: '김태식 교수님', task: '진로 탐색 보고서', weight: 100, date: '2026-06-28', status: '미시작', score: '', notes: 'P/F 과목. 제출 시 Pass' }
+      ],
+      gpaRows: [
+        { id: 1, subject: '미적분학 1', type: '전공필수', credits: 3, grade: 'A0', gp: 4.0, isPassFail: 'No', notes: '기말고사 만회하자' },
+        { id: 2, subject: '일반물리학 1', type: '전공필수', credits: 3, grade: 'A+', gp: 4.5, isPassFail: 'No', notes: '실험 만점 유지 중' },
+        { id: 3, subject: '컴퓨터프로그래밍', type: '전공선택', credits: 3, grade: 'B+', gp: 3.5, isPassFail: 'No', notes: '프로젝트 완성도 높이기' },
+        { id: 4, subject: '대학 영어', type: '교양필수', credits: 2, grade: 'A0', gp: 4.0, isPassFail: 'No', notes: '회화 참여도 적극적으로!' },
+        { id: 5, subject: '새내기 세미나', type: '일반선택', credits: 1, grade: 'P', gp: 0, isPassFail: 'Yes', notes: '보고서 제출 완료' }
+      ],
+      bucketList: [
+        { id: 1, mission: '동아리 박람회 구경하고 맘에 드는 곳 가입하기 🎸', completed: true, date: '2026-03-08' },
+        { id: 2, mission: '신입생 MT 참석해서 선배/동기들과 친해지기 🚌', completed: true, date: '2026-03-14' },
+        { id: 3, mission: '중앙도서관 열람실에서 밤샘 시험공부 해보기 ☕', completed: false, date: '' },
+        { id: 4, mission: '모바일 학생증 발급받아 도서관 게이트 찍어보기 💳', completed: true, date: '2026-03-03' },
+        { id: 5, mission: '교내 학생식당 투어해보고 가장 맛있는 메뉴 찾기 🍛', completed: true, date: '2026-03-10' },
+        { id: 6, mission: '대학교 축제 주점 즐기고 라인업 공연 앞에서 보기 🎤', completed: false, date: '' },
+        { id: 7, mission: '지도교수님 연구실 노크하고 진로 면담 해보기 💬', completed: false, date: '' },
+        { id: 8, mission: '학기 중간에 예쁜 캠퍼스 벚꽃 나무 아래서 동기들과 단체 사진 찍기 🌸', completed: true, date: '2026-04-05' },
+        { id: 9, mission: '성적 우수 또는 국가 장학금 수혜 받아보기 🏆', completed: false, date: '' },
+        { id: 10, mission: '방학 때 동기들과 첫 우정 해외 배낭여행 계획하기 ✈️', completed: false, date: '' }
+      ],
+      notes: `[2026학년도 1학기 새내기 다짐]
+- 매일 9시 1교시 수업 지각하지 않기!
+- 시험 기간 벼락치기 지양하고 최소 2주 전부터 전공 과목 요약하기.
+- 매주 목요일은 동아리 밴드 합주 연습일 (18:00 ~ 20:00).
+- 방학 대비 토익 인강 알아보기.
+
+[교수님 연락처 및 오피스 정보]
+- 이진우 교수님 (미적분학 1): 과학관 402호 / jwlee@univ.ac.kr (오피스 아워: 목요일 14:00~16:00)
+- 박성민 교수님 (일반물리학 1): 물리학동 203호 / smpark@univ.ac.kr
+`
+    };
+
+    // Excel Column Letter Mappings
+    const syllabusCols = ['', 'No', 'subject', 'type', 'credits', 'schedule', 'professor', 'task', 'weight', 'date', 'dday', 'status', 'score', 'notes'];
+    const gpaCols = ['', 'No', 'subject', 'type', 'credits', 'grade', 'gp', 'isPassFail', 'notes'];
+
+    // Selected Cell Coordinate
+    let selectedCell = null; // { tableId, rowIndex, colIndex, element }
+
+    // DOM Elements selection
+    const elements = {
+      themeSelect: document.getElementById('theme-select'),
+      btnExportCsv: document.getElementById('btn-export-csv'),
+      btnExportJson: document.getElementById('btn-export-json'),
+      btnImportJson: document.getElementById('btn-import-json'),
+      fileInputJson: document.getElementById('file-input-json'),
+      btnReset: document.getElementById('btn-reset'),
+      btnPrint: document.getElementById('btn-print'),
+      
+      // Dashboard
+      dashboardDday: document.getElementById('dashboard-dday'),
+      kpiGpaVal: document.getElementById('kpi-gpa-val'),
+      kpiGpaMax: document.querySelector('#kpi-gpa-card .kpi-max'),
+      kpiGpaStatus: document.getElementById('kpi-gpa-status'),
+      kpiCreditsVal: document.getElementById('kpi-credits-val'),
+      kpiCreditsTarget: document.getElementById('kpi-credits-target'),
+      kpiCreditsProgress: document.getElementById('kpi-credits-progress'),
+      kpiTasksPct: document.getElementById('kpi-tasks-pct'),
+      kpiTasksRatio: document.getElementById('kpi-tasks-ratio'),
+      kpiTasksProgress: document.getElementById('kpi-tasks-progress'),
+      kpiBucketPct: document.getElementById('kpi-bucket-pct'),
+      kpiBucketRatio: document.getElementById('kpi-bucket-ratio'),
+      kpiBucketMessage: document.getElementById('kpi-bucket-message'),
+      welcomeAvatar: document.getElementById('welcome-avatar'),
+      profileEmoji: document.getElementById('profile-emoji'),
+      profileDept: document.getElementById('profile-dept'),
+      profileName: document.getElementById('profile-name'),
+      profileQuote: document.getElementById('profile-quote'),
+      
+      // Formula Bar
+      activeCellId: document.getElementById('active-cell-id'),
+      formulaInput: document.getElementById('formula-input'),
+      
+      // Sheet Contents & Tabs
+      tabs: document.querySelectorAll('.sheet-tab'),
+      contents: document.querySelectorAll('.sheet-content'),
+      
+      // Tables
+      tableSyllabus: document.getElementById('table-syllabus'),
+      tbodySyllabus: document.getElementById('tbody-syllabus'),
+      btnAddSyllabusRow: document.getElementById('btn-add-syllabus-row'),
+      btnDeleteSyllabusRow: document.getElementById('btn-delete-syllabus-row'),
+      
+      tableGpa: document.getElementById('table-gpa'),
+      tbodyGpa: document.getElementById('tbody-gpa'),
+      btnAddGpaRow: document.getElementById('btn-add-gpa-row'),
+      btnDeleteGpaRow: document.getElementById('btn-delete-gpa-row'),
+      gpaStandard: document.getElementById('gpa-standard'),
+      gpaTotalCredits: document.getElementById('gpa-total-credits'),
+      gpaAvgGpa: document.getElementById('gpa-avg-gpa'),
+      gpaSummaryNote: document.getElementById('gpa-summary-note'),
+      
+      // Timetable
+      tbodyTimetable: document.getElementById('tbody-timetable'),
+      btnSyncTimetable: document.getElementById('btn-sync-timetable'),
+      
+      // Bucketlist & Notes
+      tbodyBucket: document.getElementById('tbody-bucket'),
+      freeNotes: document.getElementById('free-notes'),
+      notesSaveStatus: document.getElementById('notes-save-status'),
+      
+      // Modal
+      modalImport: document.getElementById('modal-import-confirm'),
+      btnImportConfirm: document.getElementById('btn-import-confirm'),
+      btnImportCancel: document.getElementById('btn-import-cancel')
+    };
+
+    // ----------------------------------------------------
+    // 1. Data Storage & Init
+    // ----------------------------------------------------
+
+    function renderProfile() {
+      if (state.profile) {
+        elements.profileEmoji.innerText = state.profile.emoji || '🌸';
+        elements.profileDept.innerText = state.profile.dept || '전공 미지정 학과';
+        elements.profileName.innerText = state.profile.name || '26학번 새내기';
+        elements.profileQuote.innerText = state.profile.quote || '';
+      }
+    }
+
+    function init() {
+      loadData();
+      applyTheme(state.theme);
+      elements.themeSelect.value = state.theme;
+      elements.gpaStandard.value = state.gpaStandard;
+      
+      renderSyllabusTable();
+      renderGpaTable();
+      renderTimetable();
+      renderBucketListTable();
+      elements.freeNotes.value = state.notes;
+      renderProfile();
+      
+      updateDashboard();
+      setupEventListeners();
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('freshman_planner_26_data');
+      if (saved) {
+        try {
+          state = JSON.parse(saved);
+          // Fallback for missing keys
+          if (!state.theme) state.theme = 'theme-excel';
+          if (!state.gpaStandard) state.gpaStandard = '4.5';
+          if (!state.profile) state.profile = JSON.parse(JSON.stringify(defaultTemplates.profile));
+          if (!state.syllabusRows) state.syllabusRows = [];
+          if (!state.gpaRows) state.gpaRows = [];
+          if (!state.bucketList) state.bucketList = [];
+          if (state.notes === undefined) state.notes = '';
+        } catch (e) {
+          console.error('데이터 파싱 오류. 기본값을 불러옵니다.', e);
+          loadDefaults();
+        }
+      } else {
+        loadDefaults();
+      }
+    }
+
+    function loadDefaults() {
+      state = {
+        theme: 'theme-excel',
+        gpaStandard: '4.5',
+        profile: JSON.parse(JSON.stringify(defaultTemplates.profile)),
+        syllabusRows: JSON.parse(JSON.stringify(defaultTemplates.syllabusRows)),
+        gpaRows: JSON.parse(JSON.stringify(defaultTemplates.gpaRows)),
+        bucketList: JSON.parse(JSON.stringify(defaultTemplates.bucketList)),
+        notes: defaultTemplates.notes
+      };
+      saveData();
+    }
+
+    function saveData() {
+      localStorage.setItem('freshman_planner_26_data', JSON.stringify(state));
+    }
+
+    // ----------------------------------------------------
+    // 2. Rendering Functions
+    // ----------------------------------------------------
+
+    // Render Syllabus Table Rows
+    function renderSyllabusTable() {
+      elements.tbodySyllabus.innerHTML = '';
+      state.syllabusRows.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = row.id;
+        tr.dataset.index = idx;
+        
+        // Row header number
+        const tdRowHead = document.createElement('td');
+        tdRowHead.className = 'row-num-col';
+        tdRowHead.innerText = idx + 1;
+        tr.appendChild(tdRowHead);
+        
+        // Syllabus cell values
+        syllabusCols.forEach((colName, colIdx) => {
+          if (colIdx === 0) return; // skip row header
+          
+          const td = document.createElement('td');
+          td.dataset.row = idx;
+          td.dataset.col = colIdx;
+          td.dataset.field = colName;
+          
+          if (colName === 'No') {
+            td.innerText = idx + 1;
+            td.className = 'text-center';
+          } else if (colName === 'dday') {
+            const dday = calculateDDay(row.date);
+            td.innerText = dday;
+            td.className = 'text-center';
+            if (dday.startsWith('D-') && !dday.includes('-0') && !dday.includes('+')) {
+              td.style.color = '#a80000';
+              td.style.fontWeight = 'bold';
+            }
+          } else if (colName === 'status') {
+            td.className = 'text-center';
+            const badge = document.createElement('span');
+            badge.className = `status-badge ${getStatusClass(row.status)}`;
+            badge.innerText = row.status || '미시작';
+            td.appendChild(badge);
+          } else {
+            td.innerText = row[colName] !== undefined ? row[colName] : '';
+            if (colName === 'credits' || colName === 'weight' || colName === 'score') {
+              td.className = 'text-center';
+            }
+          }
+          
+          // Select cell event
+          td.addEventListener('click', (e) => selectCell('table-syllabus', td, idx, colIdx));
+          td.addEventListener('dblclick', (e) => startEditingCell(td));
+          
+          tr.appendChild(td);
+        });
+        
+        elements.tbodySyllabus.appendChild(tr);
+      });
+    }
+
+    // Get status badge CSS class
+    function getStatusClass(status) {
+      switch (status) {
+        case '미시작': return 'not-started';
+        case '진행중': return 'in-progress';
+        case '완료': return 'completed';
+        case '시험': return 'exam';
+        default: return 'not-started';
+      }
+    }
+
+    // Render GPA Table Rows
+    function renderGpaTable() {
+      elements.tbodyGpa.innerHTML = '';
+      state.gpaRows.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = row.id;
+        tr.dataset.index = idx;
+        
+        // Row header number
+        const tdRowHead = document.createElement('td');
+        tdRowHead.className = 'row-num-col';
+        tdRowHead.innerText = idx + 1;
+        tr.appendChild(tdRowHead);
+        
+        gpaCols.forEach((colName, colIdx) => {
+          if (colIdx === 0) return;
+          
+          const td = document.createElement('td');
+          td.dataset.row = idx;
+          td.dataset.col = colIdx;
+          td.dataset.field = colName;
+          
+          if (colName === 'No') {
+            td.innerText = idx + 1;
+            td.className = 'text-center';
+          } else if (colName === 'gp') {
+            td.innerText = row.gp !== undefined ? Number(row.gp).toFixed(2) : '0.00';
+            td.className = 'text-center';
+          } else {
+            td.innerText = row[colName] !== undefined ? row[colName] : '';
+            if (colName === 'credits' || colName === 'grade' || colName === 'isPassFail') {
+              td.className = 'text-center';
+            }
+          }
+          
+          td.addEventListener('click', (e) => selectCell('table-gpa', td, idx, colIdx));
+          td.addEventListener('dblclick', (e) => startEditingCell(td));
+          
+          tr.appendChild(td);
+        });
+        
+        elements.tbodyGpa.appendChild(tr);
+      });
+      
+      calculateGpaSummary();
+    }
+
+    // Render Timetable from Syllabus Schedule data
+    function renderTimetable() {
+      // Clear previous cards
+      const cells = elements.tbodyTimetable.querySelectorAll('td[data-day]');
+      cells.forEach(cell => {
+        cell.innerHTML = '';
+      });
+      
+      // Collect unique subjects
+      const subjectList = [];
+      state.syllabusRows.forEach(row => {
+        if (row.subject && !subjectList.includes(row.subject)) {
+          subjectList.push(row.subject);
+        }
+      });
+      
+      // Parse and render subjects
+      state.syllabusRows.forEach(row => {
+        if (!row.subject || !row.schedule) return;
+        
+        const parsedList = parseSchedule(row.schedule);
+        const subjectIndex = subjectList.indexOf(row.subject);
+        const colorClass = `subject-color-${subjectIndex % 8}`;
+        
+        parsedList.forEach(item => {
+          const { day, periods } = item;
+          periods.forEach(period => {
+            const cell = elements.tbodyTimetable.querySelector(`td[data-day="${day}"][data-period="${period}"]`);
+            if (cell) {
+              const existingCard = cell.querySelector(`.timetable-subject-card`);
+              if (existingCard) return;
+              
+              const card = document.createElement('div');
+              card.className = `timetable-subject-card ${colorClass}`;
+              
+              const nameSpan = document.createElement('span');
+              nameSpan.className = 'subject-name';
+              nameSpan.innerText = row.subject;
+              nameSpan.title = `${row.subject} (${row.professor || ''})`;
+              
+              const roomSpan = document.createElement('span');
+              roomSpan.className = 'subject-room';
+              roomSpan.innerText = row.professor ? row.professor.split(' ')[0] : '';
+              
+              card.appendChild(nameSpan);
+              if (roomSpan.innerText) card.appendChild(roomSpan);
+              
+              cell.appendChild(card);
+            }
+          });
+        });
+      });
+    }
+
+    // Parse Schedule String: "화 3,4 / 목 3"
+    function parseSchedule(scheduleStr) {
+      const schedule = [];
+      if (!scheduleStr) return schedule;
+      
+      const parts = scheduleStr.split('/');
+      parts.forEach(part => {
+        const trimmed = part.trim();
+        if (!trimmed) return;
+        
+        const match = trimmed.match(/^([월화수목금])\s*([0-9,\s]+)$/);
+        if (match) {
+          const day = match[1];
+          const periods = match[2].split(',')
+                                  .map(p => parseInt(p.trim(), 10))
+                                  .filter(p => !isNaN(p) && p >= 1 && p <= 9);
+          if (periods.length > 0) {
+            schedule.push({ day, periods });
+          }
+        }
+      });
+      return schedule;
+    }
+
+    // Render Bucket List Table
+    function renderBucketListTable() {
+      elements.tbodyBucket.innerHTML = '';
+      state.bucketList.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = item.id;
+        if (item.completed) {
+          tr.className = 'bucket-row-completed';
+        }
+        
+        // Row index column
+        const tdRowHead = document.createElement('td');
+        tdRowHead.className = 'row-num-col';
+        tdRowHead.innerText = idx + 1;
+        tr.appendChild(tdRowHead);
+        
+        // Checkbox Col
+        const tdCheck = document.createElement('td');
+        tdCheck.className = 'text-center';
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.className = 'bucket-checkbox';
+        chk.checked = item.completed;
+        chk.addEventListener('change', (e) => toggleBucketItem(idx, chk.checked));
+        tdCheck.appendChild(chk);
+        tr.appendChild(tdCheck);
+        
+        // No Col
+        const tdNo = document.createElement('td');
+        tdNo.className = 'text-center';
+        tdNo.innerText = idx + 1;
+        tr.appendChild(tdNo);
+        
+        // Mission Col
+        const tdMission = document.createElement('td');
+        tdMission.innerText = item.mission;
+        tdMission.style.cursor = 'pointer';
+        tdMission.addEventListener('click', () => {
+          chk.checked = !chk.checked;
+          toggleBucketItem(idx, chk.checked);
+        });
+        tr.appendChild(tdMission);
+        
+        // Date Col
+        const tdDate = document.createElement('td');
+        tdDate.className = 'text-center';
+        tdDate.innerText = item.date || '-';
+        tr.appendChild(tdDate);
+        
+        elements.tbodyBucket.appendChild(tr);
+      });
+    }
+
+    // ----------------------------------------------------
+    // 3. Calculation & Stats Engines
+    // ----------------------------------------------------
+
+    function calculateDDay(dateStr) {
+      if (!dateStr) return '-';
+      const target = new Date(dateStr + 'T00:00:00');
+      if (isNaN(target.getTime())) return '-';
+      
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      target.setHours(0,0,0,0);
+      
+      const diffTime = target.getTime() - today.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 0) {
+        return 'D-Day';
+      } else if (diffDays > 0) {
+        return `D-${diffDays}`;
+      } else {
+        return `D+${Math.abs(diffDays)}`;
+      }
+    }
+
+    // GPA Calculation logic
+    function calculateGpaSummary() {
+      let totalCredits = 0;
+      let totalGpCredits = 0;
+      let weightedGpSum = 0;
+      
+      const is4_5Scale = state.gpaStandard === '4.5';
+      
+      state.gpaRows.forEach(row => {
+        const credits = parseFloat(row.credits);
+        if (isNaN(credits) || credits <= 0) return;
+        
+        totalCredits += credits;
+        
+        if (row.isPassFail === 'Yes' || row.grade === 'P' || row.grade === 'NP') {
+          return;
+        }
+        
+        const gp = parseFloat(row.gp);
+        if (!isNaN(gp) && row.grade !== '') {
+          totalGpCredits += credits;
+          weightedGpSum += (gp * credits);
+        }
+      });
+      
+      const avgGpa = totalGpCredits > 0 ? (weightedGpSum / totalGpCredits) : 0.00;
+      
+      elements.gpaTotalCredits.innerText = `${totalCredits} 학점`;
+      elements.gpaAvgGpa.innerText = avgGpa.toFixed(2);
+      
+      let comment = '';
+      if (avgGpa >= 4.3) {
+        comment = '와우! 수석 대기 중이신가요? 대단합니다! 🌟';
+      } else if (avgGpa >= 4.0) {
+        comment = '매우 우수한 성적입니다. A학점 릴레이 최고! 🚀';
+      } else if (avgGpa >= 3.5) {
+        comment = '훌륭해요! 조금만 더 하면 전액 장학금도 가능! 🎓';
+      } else if (avgGpa >= 3.0) {
+        comment = '준수합니다. 한 학기 동안 열심히 달리셨네요! 👍';
+      } else if (avgGpa > 0) {
+        comment = '고생 많으셨어요! 신입생 첫 학기, 아직 기회는 많습니다! 💪';
+      } else {
+        comment = '학점 등급을 입력하여 본인의 평점을 계산해 보세요.';
+      }
+      elements.gpaSummaryNote.innerText = comment;
+      
+      // Sync to GPA KPI card
+      elements.kpiGpaVal.innerText = avgGpa.toFixed(2);
+      elements.kpiGpaMax.innerText = `/ ${is4_5Scale ? '4.50' : '4.30'}`;
+      
+      let gpaStatusText = '학점 입력 대기';
+      if (avgGpa > 0) {
+        gpaStatusText = avgGpa >= 3.5 ? '장학금 수혜 안정권! 🎉' : '목표 달성을 향해 전진!';
+      }
+      elements.kpiGpaStatus.innerText = gpaStatusText;
+      if (avgGpa >= 3.5) {
+        elements.kpiGpaStatus.className = 'kpi-trend positive';
+      } else if (avgGpa > 0 && avgGpa < 2.0) {
+        elements.kpiGpaStatus.className = 'kpi-trend negative';
+        elements.kpiGpaStatus.innerText = '학사경고 주의! ⚠️';
+      } else {
+        elements.kpiGpaStatus.className = 'kpi-subtext';
+      }
+    }
+
+    // Convert Letter Grade to GP Value
+    function convertGradeToGP(grade, is4_5Scale) {
+      if (is4_5Scale) {
+        switch (grade) {
+          case 'A+': return 4.5;
+          case 'A0': return 4.0;
+          case 'B+': return 3.5;
+          case 'B0': return 3.0;
+          case 'C+': return 2.5;
+          case 'C0': return 2.0;
+          case 'D+': return 1.5;
+          case 'D0': return 1.0;
+          case 'F': return 0.0;
+          default: return 0.0;
+        }
+      } else {
+        switch (grade) {
+          case 'A+': return 4.3;
+          case 'A0': return 4.0;
+          case 'B+': return 3.3;
+          case 'B0': return 3.0;
+          case 'C+': return 2.3;
+          case 'C0': return 2.0;
+          case 'D+': return 1.3;
+          case 'D0': return 1.0;
+          case 'F': return 0.0;
+          default: return 0.0;
+        }
+      }
+    }
+
+    // Update all indicators on the top dashboard
+    function updateDashboard() {
+      calculateGpaSummary();
+      
+      let totalCredits = 0;
+      state.gpaRows.forEach(row => {
+        const cr = parseFloat(row.credits);
+        if (!isNaN(cr)) totalCredits += cr;
+      });
+      elements.kpiCreditsVal.innerText = totalCredits;
+      const target = state.profile.targetCredits || 18;
+      if (document.activeElement !== elements.kpiCreditsTarget) {
+        elements.kpiCreditsTarget.innerText = `/ ${target} 학점`;
+      }
+      const creditPct = Math.min(100, Math.round((totalCredits / target) * 100));
+      elements.kpiCreditsProgress.style.width = `${creditPct}%`;
+      
+      // Task Progress
+      const totalTasks = state.syllabusRows.length;
+      const completedTasks = state.syllabusRows.filter(r => r.status === '완료').length;
+      const taskPct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+      elements.kpiTasksPct.innerText = `${taskPct}%`;
+      elements.kpiTasksRatio.innerText = `(${completedTasks}/${totalTasks} 완료)`;
+      elements.kpiTasksProgress.style.width = `${taskPct}%`;
+      
+      // Bucket List Progress
+      const totalBucket = state.bucketList.length;
+      const completedBucket = state.bucketList.filter(b => b.completed).length;
+      const bucketPct = totalBucket > 0 ? Math.round((completedBucket / totalBucket) * 100) : 0;
+      elements.kpiBucketPct.innerText = `${bucketPct}%`;
+      elements.kpiBucketRatio.innerText = `(${completedBucket}/${totalBucket} 달성)`;
+      
+      let bucketMsg = '한번 뿐인 1학년, 즐겁게!';
+      if (bucketPct >= 80) bucketMsg = '프로 신입생! 낭만 충만 🌸';
+      else if (bucketPct >= 50) bucketMsg = '인싸 라이프 진행 중! 😎';
+      else if (bucketPct >= 20) bucketMsg = '하나씩 달성하는 보람! 🎈';
+      elements.kpiBucketMessage.innerText = bucketMsg;
+      
+      // Welcome Banner Next D-Day
+      let nextEvent = null;
+      let minDiff = Infinity;
+      
+      state.syllabusRows.forEach(row => {
+        if (!row.date || row.status === '완료') return;
+        
+        const targetDate = new Date(row.date + 'T00:00:00');
+        if (isNaN(targetDate.getTime())) return;
+        
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        targetDate.setHours(0,0,0,0);
+        
+        const diff = targetDate.getTime() - today.getTime();
+        if (diff >= 0 && diff < minDiff) {
+          minDiff = diff;
+          nextEvent = row;
+        }
+      });
+      
+      if (nextEvent) {
+        const days = Math.ceil(minDiff / (1000 * 60 * 60 * 24));
+        const ddayStr = days === 0 ? 'D-Day' : `D-${days}`;
+        elements.dashboardDday.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> 가장 가까운 일정: <strong>${nextEvent.subject} - ${nextEvent.task} (${ddayStr})</strong>`;
+        elements.dashboardDday.style.backgroundColor = '#fde7e9';
+        elements.dashboardDday.style.color = '#a80000';
+      } else {
+        elements.dashboardDday.innerHTML = `<i class="fa-solid fa-calendar-check"></i> 다가오는 학업 일정이 없습니다.`;
+        elements.dashboardDday.style.backgroundColor = '#dff6dd';
+        elements.dashboardDday.style.color = '#107c41';
+      }
+    }
+
+    // ----------------------------------------------------
+    // 4. Excel Cell Interactive Editing Logic
+    // ----------------------------------------------------
+
+    function selectCell(tableId, element, rowIndex, colIndex) {
+      if (selectedCell) {
+        selectedCell.element.classList.remove('selected');
+      }
+      
+      selectedCell = {
+        tableId,
+        rowIndex,
+        colIndex,
+        element
+      };
+      
+      element.classList.add('selected');
+      
+      const colLetter = String.fromCharCode(65 + colIndex);
+      const excelId = `${colLetter}${rowIndex + 1}`;
+      elements.activeCellId.innerText = excelId;
+      
+      let cellText = '';
+      const fieldName = element.dataset.field;
+      
+      if (tableId === 'table-syllabus') {
+        cellText = state.syllabusRows[rowIndex][fieldName] || '';
+      } else if (tableId === 'table-gpa') {
+        cellText = state.gpaRows[rowIndex][fieldName] || '';
+      }
+      
+      elements.formulaInput.value = cellText;
+      elements.formulaInput.removeAttribute('readonly');
+    }
+
+    function startEditingCell(td) {
+      if (td.classList.contains('editing')) return;
+      
+      const field = td.dataset.field;
+      if (field === 'No' || field === 'dday' || field === 'gp') return;
+      
+      td.classList.add('editing');
+      
+      const tableId = selectedCell.tableId;
+      const rowIdx = selectedCell.rowIndex;
+      let val = '';
+      
+      if (tableId === 'table-syllabus') {
+        val = state.syllabusRows[rowIdx][field];
+      } else if (tableId === 'table-gpa') {
+        val = state.gpaRows[rowIdx][field];
+      }
+      
+      td.innerHTML = '';
+      let inputElement;
+      
+      if (field === 'type') {
+        inputElement = document.createElement('select');
+        const options = ['전공필수', '전공선택', '교양필수', '교양선택', '일반선택'];
+        options.forEach(opt => {
+          const o = document.createElement('option');
+          o.value = opt;
+          o.innerText = opt;
+          if (opt === val) o.selected = true;
+          inputElement.appendChild(o);
+        });
+      } else if (field === 'status') {
+        inputElement = document.createElement('select');
+        const options = ['미시작', '진행중', '완료', '시험'];
+        options.forEach(opt => {
+          const o = document.createElement('option');
+          o.value = opt;
+          o.innerText = opt;
+          if (opt === val) o.selected = true;
+          inputElement.appendChild(o);
+        });
+      } else if (field === 'grade') {
+        inputElement = document.createElement('select');
+        const options = ['A+', 'A0', 'B+', 'B0', 'C+', 'C0', 'D+', 'D0', 'F', 'P', 'NP', ''];
+        options.forEach(opt => {
+          const o = document.createElement('option');
+          o.value = opt;
+          o.innerText = opt || '(성적 선택)';
+          if (opt === val) o.selected = true;
+          inputElement.appendChild(o);
+        });
+      } else if (field === 'isPassFail') {
+        inputElement = document.createElement('select');
+        const options = ['No', 'Yes'];
+        options.forEach(opt => {
+          const o = document.createElement('option');
+          o.value = opt;
+          o.innerText = opt;
+          if (opt === val) o.selected = true;
+          inputElement.appendChild(o);
+        });
+      } else if (field === 'date') {
+        inputElement = document.createElement('input');
+        inputElement.type = 'date';
+        inputElement.value = val || '';
+      } else if (field === 'credits' || field === 'weight' || field === 'score') {
+        inputElement = document.createElement('input');
+        inputElement.type = 'number';
+        inputElement.value = val;
+      } else {
+        inputElement = document.createElement('input');
+        inputElement.type = 'text';
+        inputElement.value = val || '';
+      }
+      
+      td.appendChild(inputElement);
+      inputElement.focus();
+      
+      inputElement.addEventListener('blur', () => finishEditingCell(td, inputElement.value));
+      inputElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          finishEditingCell(td, inputElement.value);
+        } else if (e.key === 'Escape') {
+          td.classList.remove('editing');
+          td.innerHTML = '';
+          if (tableId === 'table-syllabus') {
+            if (field === 'status') {
+              const badge = document.createElement('span');
+              badge.className = `status-badge ${getStatusClass(val)}`;
+              badge.innerText = val || '미시작';
+              td.appendChild(badge);
+            } else {
+              td.innerText = val !== undefined ? val : '';
+            }
+          } else if (tableId === 'table-gpa') {
+            td.innerText = val !== undefined ? val : '';
+          }
+        }
+      });
+    }
+
+    function finishEditingCell(td, newValue) {
+      if (!td.classList.contains('editing')) return;
+      td.classList.remove('editing');
+      
+      const field = td.dataset.field;
+      const tableId = selectedCell.tableId;
+      const rowIdx = selectedCell.rowIndex;
+      
+      let formattedValue = newValue;
+      if (field === 'credits' || field === 'weight' || field === 'score') {
+        formattedValue = newValue === '' ? '' : Number(newValue);
+      }
+      
+      if (tableId === 'table-syllabus') {
+        state.syllabusRows[rowIdx][field] = formattedValue;
+        renderSyllabusTable();
+        if (field === 'schedule' || field === 'subject' || field === 'professor') {
+          renderTimetable();
+        }
+      } else if (tableId === 'table-gpa') {
+        state.gpaRows[rowIdx][field] = formattedValue;
+        if (field === 'grade') {
+          const gp = convertGradeToGP(formattedValue, state.gpaStandard === '4.5');
+          state.gpaRows[rowIdx].gp = gp;
+        }
+        renderGpaTable();
+      }
+      
+      saveData();
+      updateDashboard();
+      
+      const updatedTable = document.getElementById(tableId);
+      const updatedTd = updatedTable.querySelector(`tbody tr[data-index="${rowIdx}"] td[data-field="${field}"]`);
+      if (updatedTd) {
+        selectCell(tableId, updatedTd, rowIdx, selectedCell.colIndex);
+      }
+    }
+
+    // ----------------------------------------------------
+    // 5. App Event Handlers
+    // ----------------------------------------------------
+
+    function setupEventListeners() {
+      // Profile Editable Fields Event Listeners
+      if (elements.welcomeAvatar) {
+        elements.welcomeAvatar.addEventListener('click', () => {
+          const currentEmoji = state.profile ? state.profile.emoji : '🌸';
+          const newEmoji = prompt('새로운 프로필 이모지를 입력해 주세요 (한 글자):', currentEmoji);
+          if (newEmoji && newEmoji.trim() !== '') {
+            const char = Array.from(newEmoji.trim())[0];
+            if (!state.profile) state.profile = {};
+            state.profile.emoji = char;
+            saveData();
+            renderProfile();
+            updateDashboard();
+          }
+        });
+        
+        elements.welcomeAvatar.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            elements.welcomeAvatar.click();
+          }
+        });
+      }
+
+      const makeProfileFieldEditable = (element, fieldName) => {
+        if (!element) return;
+        element.addEventListener('blur', () => {
+          if (!state.profile) state.profile = {};
+          state.profile[fieldName] = element.innerText.trim();
+          saveData();
+          updateDashboard();
+        });
+        element.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            element.blur();
+          }
+        });
+      };
+
+      makeProfileFieldEditable(elements.profileDept, 'dept');
+      makeProfileFieldEditable(elements.profileName, 'name');
+      makeProfileFieldEditable(elements.profileQuote, 'quote');
+
+      if (elements.kpiCreditsTarget) {
+        elements.kpiCreditsTarget.addEventListener('focus', () => {
+          elements.kpiCreditsTarget.innerText = state.profile.targetCredits || 18;
+        });
+        elements.kpiCreditsTarget.addEventListener('blur', () => {
+          const raw = elements.kpiCreditsTarget.innerText.trim();
+          const parsed = parseInt(raw, 10);
+          if (!isNaN(parsed) && parsed > 0) {
+            if (!state.profile) state.profile = {};
+            state.profile.targetCredits = parsed;
+          }
+          saveData();
+          updateDashboard();
+        });
+        elements.kpiCreditsTarget.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            elements.kpiCreditsTarget.blur();
+          }
+        });
+      }
+
+      // Theme selection change
+      elements.themeSelect.addEventListener('change', (e) => {
+        applyTheme(e.target.value);
+      });
+      
+      // GPA Standard Scale change
+      elements.gpaStandard.addEventListener('change', (e) => {
+        state.gpaStandard = e.target.value;
+        state.gpaRows.forEach(row => {
+          row.gp = convertGradeToGP(row.grade, state.gpaStandard === '4.5');
+        });
+        saveData();
+        renderGpaTable();
+      });
+      
+      // Tab Switching
+      elements.tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const targetId = tab.dataset.target;
+          elements.tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          elements.contents.forEach(c => c.classList.remove('active'));
+          document.getElementById(targetId).classList.add('active');
+          
+          if (selectedCell) {
+            selectedCell.element.classList.remove('selected');
+            selectedCell = null;
+          }
+          elements.activeCellId.innerText = 'A1';
+          elements.formulaInput.value = '';
+          elements.formulaInput.setAttribute('readonly', 'true');
+        });
+        
+        tab.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            tab.click();
+          }
+        });
+      });
+      
+      // Edit Formula Bar event
+      elements.formulaInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && selectedCell) {
+          const td = selectedCell.element;
+          finishEditingCell(td, elements.formulaInput.value);
+          elements.formulaInput.blur();
+        }
+      });
+      
+      // Syllabus Action Buttons
+      elements.btnAddSyllabusRow.addEventListener('click', () => {
+        const nextId = state.syllabusRows.length > 0 ? Math.max(...state.syllabusRows.map(r => r.id)) + 1 : 1;
+        state.syllabusRows.push({
+          id: nextId,
+          subject: '새 수강 과목',
+          type: '교양선택',
+          credits: 3,
+          schedule: '',
+          professor: '',
+          task: '과제 1',
+          weight: 10,
+          date: '',
+          status: '미시작',
+          score: '',
+          notes: ''
+        });
+        saveData();
+        renderSyllabusTable();
+        updateDashboard();
+      });
+      
+      elements.btnDeleteSyllabusRow.addEventListener('click', () => {
+        if (!selectedCell || selectedCell.tableId !== 'table-syllabus') {
+          alert('삭제할 행의 셀을 클릭하여 선택해 주세요.');
+          return;
+        }
+        const idx = selectedCell.rowIndex;
+        state.syllabusRows.splice(idx, 1);
+        selectedCell = null;
+        saveData();
+        renderSyllabusTable();
+        renderTimetable();
+        updateDashboard();
+      });
+      
+      // GPA Action Buttons
+      elements.btnAddGpaRow.addEventListener('click', () => {
+        const nextId = state.gpaRows.length > 0 ? Math.max(...state.gpaRows.map(r => r.id)) + 1 : 1;
+        state.gpaRows.push({
+          id: nextId,
+          subject: '새 수강 과목',
+          type: '교양필수',
+          credits: 3,
+          grade: '',
+          gp: 0,
+          isPassFail: 'No',
+          notes: ''
+        });
+        saveData();
+        renderGpaTable();
+        updateDashboard();
+      });
+      
+      elements.btnDeleteGpaRow.addEventListener('click', () => {
+        if (!selectedCell || selectedCell.tableId !== 'table-gpa') {
+          alert('삭제할 행의 셀을 클릭하여 선택해 주세요.');
+          return;
+        }
+        const idx = selectedCell.rowIndex;
+        state.gpaRows.splice(idx, 1);
+        selectedCell = null;
+        saveData();
+        renderGpaTable();
+        updateDashboard();
+      });
+      
+      // TimeTable Sync Button
+      elements.btnSyncTimetable.addEventListener('click', () => {
+        renderTimetable();
+        alert('계획표 시트의 강의 데이터를 시간표와 다시 동기화했습니다!');
+      });
+      
+      // Notes Auto-save logic
+      let notesTimeout;
+      elements.freeNotes.addEventListener('input', () => {
+        elements.notesSaveStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+        elements.notesSaveStatus.style.color = '#e74c3c';
+        
+        clearTimeout(notesTimeout);
+        notesTimeout = setTimeout(() => {
+          state.notes = elements.freeNotes.value;
+          saveData();
+          elements.notesSaveStatus.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> 자동 저장됨';
+          elements.notesSaveStatus.style.color = 'var(--excel-green)';
+        }, 1000);
+      });
+      
+      // Reset Button
+      elements.btnReset.addEventListener('click', () => {
+        if (confirm('정말로 플래너를 리셋하시겠습니까?\n작성 중이던 모든 데이터가 지워지고 신입생 기본 템플릿으로 초기화됩니다.')) {
+          loadDefaults();
+          init();
+        }
+      });
+      
+      // Print Button
+      elements.btnPrint.addEventListener('click', () => {
+        window.print();
+      });
+      
+      // Export CSV Action
+      elements.btnExportCsv.addEventListener('click', () => {
+        const activeTab = document.querySelector('.sheet-tab.active');
+        const target = activeTab.dataset.target;
+        
+        let csvContent = '\uFEFF'; // UTF-8 BOM
+        let filename = 'college_planner.csv';
+        
+        if (target === 'sheet-syllabus') {
+          filename = '수강과목_및_평가계획.csv';
+          const headers = ['No', '과목명', '이수구분', '학점', '요일 및 교시', '교수명', '평가/과제 항목', '반영비율(%)', '일정/마감일', '진행상황', '취득점수', '비고'];
+          csvContent += headers.map(h => `"${h}"`).join(',') + '\n';
+          state.syllabusRows.forEach((row, i) => {
+            const rowData = [
+              i + 1,
+              row.subject || '',
+              row.type || '',
+              row.credits || 0,
+              row.schedule || '',
+              row.professor || '',
+              row.task || '',
+              row.weight || 0,
+              row.date || '',
+              row.status || '미시작',
+              row.score || '',
+              row.notes || ''
+            ];
+            csvContent += rowData.map(val => `"${val}"`).join(',') + '\n';
+          });
+        } else if (target === 'sheet-gpa') {
+          filename = '예상_학점_계산기.csv';
+          const headers = ['No', '과목명', '이수구분', '학점', '성적등급', '평점', 'Pass/Fail 여부', '비고'];
+          csvContent += headers.map(h => `"${h}"`).join(',') + '\n';
+          state.gpaRows.forEach((row, i) => {
+            const rowData = [
+              i + 1,
+              row.subject || '',
+              row.type || '',
+              row.credits || 0,
+              row.grade || '',
+              row.gp !== undefined ? Number(row.gp).toFixed(2) : '0.00',
+              row.isPassFail || 'No',
+              row.notes || ''
+            ];
+            csvContent += rowData.map(val => `"${val}"`).join(',') + '\n';
+          });
+        } else if (target === 'sheet-checklist') {
+          filename = '새내기_버킷리스트.csv';
+          const headers = ['No', '달성여부', '미션내용', '달성일자'];
+          csvContent += headers.map(h => `"${h}"`).join(',') + '\n';
+          state.bucketList.forEach((item, i) => {
+            const rowData = [
+              i + 1,
+              item.completed ? '완료' : '미완료',
+              item.mission || '',
+              item.date || ''
+            ];
+            csvContent += rowData.map(val => `"${val}"`).join(',') + '\n';
+          });
+        } else {
+          alert('이 시트는 CSV 내보내기를 지원하지 않습니다.');
+          return;
+        }
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+      
+      // Backup JSON Download
+      elements.btnExportJson.addEventListener('click', () => {
+        const dataStr = JSON.stringify(state, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', `freshman_planner_backup_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+      
+      // Backup JSON Upload triggers
+      elements.btnImportJson.addEventListener('click', () => {
+        elements.fileInputJson.click();
+      });
+      
+      elements.fileInputJson.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          try {
+            const importedData = JSON.parse(evt.target.result);
+            if (Array.isArray(importedData.syllabusRows) && Array.isArray(importedData.gpaRows) && Array.isArray(importedData.bucketList)) {
+              elements.modalImport.classList.add('active');
+              elements.modalImport.dataset.pendingData = evt.target.result;
+            } else {
+              alert('가져오기 실패: 올바른 플래너 백업 파일 형식이 아닙니다.');
+            }
+          } catch (err) {
+            alert('파일을 읽는 도중 오류가 발생했습니다. 올바른 JSON 형식인지 확인해 주세요.');
+          }
+        };
+        reader.readAsText(file);
+        elements.fileInputJson.value = '';
+      });
+      
+      // Modal Actions
+      elements.btnImportConfirm.addEventListener('click', () => {
+        const jsonStr = elements.modalImport.dataset.pendingData;
+        if (jsonStr) {
+          state = JSON.parse(jsonStr);
+          saveData();
+          init();
+          elements.modalImport.classList.remove('active');
+          delete elements.modalImport.dataset.pendingData;
+          alert('성공적으로 데이터를 복원했습니다!');
+        }
+      });
+      
+      elements.btnImportCancel.addEventListener('click', () => {
+        elements.modalImport.classList.remove('active');
+        delete elements.modalImport.dataset.pendingData;
+      });
+      
+      elements.modalImport.addEventListener('click', (e) => {
+        if (e.target === elements.modalImport) {
+          elements.modalImport.classList.remove('active');
+          delete elements.modalImport.dataset.pendingData;
+        }
+      });
+      
+      // Keyboard listeners for cell navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.altKey && e.key >= '1' && e.key <= '4') {
+          const tabIdx = parseInt(e.key, 10) - 1;
+          if (elements.tabs[tabIdx]) {
+            e.preventDefault();
+            elements.tabs[tabIdx].click();
+            elements.tabs[tabIdx].focus();
+          }
+          return;
+        }
+
+        if (document.activeElement && (
+            document.activeElement.tagName === 'INPUT' || 
+            document.activeElement.tagName === 'TEXTAREA' || 
+            document.activeElement.contentEditable === 'true')) {
+          return;
+        }
+
+        if (!selectedCell || document.querySelector('.editing')) return;
+        
+        const tableId = selectedCell.tableId;
+        const rowIdx = selectedCell.rowIndex;
+        const colIdx = selectedCell.colIndex;
+        
+        let nextRow = rowIdx;
+        let nextCol = colIdx;
+        
+        let maxRows = 0;
+        let maxCols = 0;
+        let colsArray = [];
+        
+        if (tableId === 'table-syllabus') {
+          maxRows = state.syllabusRows.length;
+          maxCols = syllabusCols.length - 1;
+          colsArray = syllabusCols;
+        } else if (tableId === 'table-gpa') {
+          maxRows = state.gpaRows.length;
+          maxCols = gpaCols.length - 1;
+          colsArray = gpaCols;
+        } else {
+          return;
+        }
+        
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          if (e.shiftKey) {
+            nextCol = colIdx - 1;
+            if (nextCol < 1) {
+              nextCol = maxCols;
+              nextRow = rowIdx - 1;
+              if (nextRow < 0) nextRow = maxRows - 1;
+            }
+          } else {
+            nextCol = colIdx + 1;
+            if (nextCol > maxCols) {
+              nextCol = 1;
+              nextRow = rowIdx + 1;
+              if (nextRow >= maxRows) nextRow = 0;
+            }
+          }
+        } else if (e.key === 'ArrowUp') {
+          nextRow = Math.max(0, rowIdx - 1);
+          e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+          nextRow = Math.min(maxRows - 1, rowIdx + 1);
+          e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+          nextCol = Math.max(1, colIdx - 1);
+          e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+          nextCol = Math.min(maxCols, colIdx + 1);
+          e.preventDefault();
+        } else if (e.key === 'Enter' || e.key === 'F2') {
+          const cell = selectedCell.element;
+          startEditingCell(cell);
+          e.preventDefault();
+          return;
+        } else {
+          return;
+        }
+        
+        if (nextRow !== rowIdx || nextCol !== colIdx) {
+          const table = document.getElementById(tableId);
+          const field = colsArray[nextCol];
+          const targetCell = table.querySelector(`tbody tr[data-index="${nextRow}"] td[data-field="${field}"]`);
+          if (targetCell) {
+            selectCell(tableId, targetCell, nextRow, nextCol);
+          }
+        }
+      });
+    }
+
+    function applyTheme(themeName) {
+      document.body.className = '';
+      document.body.classList.add(themeName);
+      state.theme = themeName;
+      saveData();
+    }
+
+    function toggleBucketItem(index, isCompleted) {
+      state.bucketList[index].completed = isCompleted;
+      if (isCompleted) {
+        const todayStr = new Date().toISOString().slice(0, 10);
+        state.bucketList[index].date = todayStr;
+      } else {
+        state.bucketList[index].date = '';
+      }
+      saveData();
+      renderBucketListTable();
+      updateDashboard();
+    }
+
+    // Start application
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

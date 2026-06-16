@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>새내기 학업 플래너 & Excel 시트 | 26학번 전용</title>
+  <!-- Pretendard Font for Modern Korean Typography -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <!-- FontAwesome Icons for Premium Look -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-excel">
+
+  <!-- Main Container -->
+  <div class="app-container">
+    
+    <!-- Top Action Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <i class="fa-solid fa-file-excel logo-icon"></i>
+        <div class="logo-text">
+          <h1>Freshman Planner 2026</h1>
+          <span class="sub-text">26학번 신입생 대학 생활 & 학업 관리 시스템</span>
+        </div>
+      </div>
+      
+      <!-- Quick Control Tools -->
+      <div class="header-controls">
+        <div class="theme-selector-wrapper">
+          <label for="theme-select"><i class="fa-solid fa-palette"></i> 테마 선택</label>
+          <select id="theme-select" class="control-select">
+            <option value="theme-excel">엑셀 클래식 (Classic Green)</option>
+            <option value="theme-pastel">새내기 솜사탕 (Cotton Candy)</option>
+            <option value="theme-dark">밤샘 공부 모드 (Dark Slate)</option>
+            <option value="theme-sunset">노을 감성 (Sunset Glow)</option>
+          </select>
+        </div>
+        
+        <div class="btn-group">
+          <button id="btn-export-csv" class="btn btn-secondary" title="현재 시트를 CSV 파일로 내보냅니다.">
+            <i class="fa-solid fa-file-csv"></i> Excel(CSV) 내보내기
+          </button>
+          <button id="btn-export-json" class="btn btn-secondary" title="전체 데이터를 백업(JSON)합니다.">
+            <i class="fa-solid fa-download"></i> 백업 다운로드
+          </button>
+          <button id="btn-import-json" class="btn btn-secondary" title="백업 파일(JSON)을 불러옵니다.">
+            <i class="fa-solid fa-upload"></i> 불러오기
+            <input type="file" id="file-input-json" accept=".json" style="display: none;">
+          </button>
+          <button id="btn-reset" class="btn btn-danger" title="모든 데이터를 초기화하고 기본 템플릿으로 되돌립니다.">
+            <i class="fa-solid fa-rotate-left"></i> 초기화
+          </button>
+          <button id="btn-print" class="btn btn-primary" title="인쇄 및 PDF 저장을 준비합니다.">
+            <i class="fa-solid fa-print"></i> 인쇄 / PDF
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Top KPI Dashboard -->
+    <section class="dashboard-section">
+      <div class="freshman-welcome-card">
+        <div class="welcome-avatar" id="welcome-avatar" tabindex="0" title="엔터 키로 이모지 변경" style="cursor: pointer;">
+          <span class="emoji" id="profile-emoji">🌸</span>
+        </div>
+        <div class="welcome-info">
+          <div class="profile-header">
+            <span class="profile-dept" id="profile-dept" tabindex="0" contenteditable="true" title="클릭/탭하여 학과 수정">전공 미지정 학과</span>
+          </div>
+          <h2 class="welcome-title" id="profile-name" tabindex="0" contenteditable="true" title="클릭/탭하여 이름 수정">26학번 새내기</h2>
+          <p class="welcome-quote" id="profile-quote" tabindex="0" contenteditable="true" title="클릭/탭하여 다짐 수정">"대학 생활의 첫 단추, 체계적인 계획으로 완벽하게 시작해 보세요."</p>
+          <div class="welcome-dday-badge" id="dashboard-dday">
+            <i class="fa-solid fa-hourglass-half"></i> 다가오는 일정 없음
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards Grid -->
+      <div class="kpi-grid">
+        <!-- KPI 1: GPA -->
+        <div class="kpi-card" id="kpi-gpa-card">
+          <div class="kpi-header">
+            <span class="kpi-title">이번 학기 평점 (GPA)</span>
+            <i class="fa-solid fa-graduation-cap kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-gpa-val">0.00</span>
+            <span class="kpi-max">/ 4.50</span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-trend positive" id="kpi-gpa-status">성적 입력 대기 중</span>
+          </div>
+        </div>
+
+        <!-- KPI 2: Credits -->
+        <div class="kpi-card" id="kpi-credits-card">
+          <div class="kpi-header">
+            <span class="kpi-title">신청 및 이수 학점</span>
+            <i class="fa-solid fa-book-open kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-credits-val">0</span>
+            <span class="kpi-max" id="kpi-credits-target" tabindex="0" contenteditable="true" title="클릭/탭하여 목표 학점 수정">/ 18 학점</span>
+          </div>
+          <div class="kpi-footer">
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="kpi-credits-progress" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3: Task Completion -->
+        <div class="kpi-card" id="kpi-tasks-card">
+          <div class="kpi-header">
+            <span class="kpi-title">학업 과제 진행률</span>
+            <i class="fa-solid fa-list-check kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-tasks-pct">0%</span>
+            <span class="kpi-max" id="kpi-tasks-ratio">(0/0 건)</span>
+          </div>
+          <div class="kpi-footer">
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="kpi-tasks-progress" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 4: Bucket list -->
+        <div class="kpi-card" id="kpi-bucket-card">
+          <div class="kpi-header">
+            <span class="kpi-title">새내기 버킷리스트</span>
+            <i class="fa-solid fa-wand-magic-sparkles kpi-icon"></i>
+          </div>
+          <div class="kpi-value-wrapper">
+            <span class="kpi-value" id="kpi-bucket-pct">0%</span>
+            <span class="kpi-max" id="kpi-bucket-ratio">(0/8 달성)</span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-subtext" id="kpi-bucket-message">한번 뿐인 1학년, 즐겁게!</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Excel-like Formula Bar -->
+    <div class="formula-bar-container">
+      <div class="formula-cell-indicator" id="active-cell-id">A1</div>
+      <div class="formula-fx-icon">fx</div>
+      <input type="text" id="formula-input" class="formula-input" placeholder="수식 또는 셀 내용 입력..." readonly>
+      <div class="formula-info">
+        <i class="fa-solid fa-info-circle" title="셀을 더블클릭하여 수정할 수 있으며, 이 포뮬러 바에서도 수정이 반영됩니다."></i>
+      </div>
+    </div>
+
+    <!-- Sheet Workspace Grid Area -->
+    <main class="sheet-workspace">
+      
+      <!-- SHEET 1: Syllabus & Tasks (과제 및 평가 계획) -->
+      <div id="sheet-syllabus" class="sheet-content active">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-table-list"></i> 수강 과목 및 평가/과제 계획표
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-sm btn-success" id="btn-add-syllabus-row">
+              <i class="fa-solid fa-plus"></i> 행 추가 (Add Row)
+            </button>
+            <button class="btn-sm btn-danger" id="btn-delete-syllabus-row">
+              <i class="fa-solid fa-trash-can"></i> 선택 행 삭제
+            </button>
+            <span class="toolbar-tip"><i class="fa-solid fa-lightbulb"></i> 더블클릭하여 셀을 직접 수정하세요. 요일/시간은 '월 1,2' 또는 '화 3,4' 형태로 입력하면 시간표에 반영됩니다.</span>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="excel-table" id="table-syllabus">
+            <thead>
+              <tr class="header-letters">
+                <th class="row-num-col"></th>
+                <th style="width: 50px;">No</th>
+                <th style="width: 140px;">과목명</th>
+                <th style="width: 100px;">이수구분</th>
+                <th style="width: 60px;">학점</th>
+                <th style="width: 100px;">요일 및 교시</th>
+                <th style="width: 110px;">교수명</th>
+                <th style="width: 160px;">평가/과제 항목</th>
+                <th style="width: 70px;">반영비율(%)</th>
+                <th style="width: 110px;">일정/마감일</th>
+                <th style="width: 80px;">D-Day</th>
+                <th style="width: 110px;">진행상황</th>
+                <th style="width: 80px;">취득점수</th>
+                <th>비고</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-syllabus">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHEET 2: Timetable (시각적 강의 시간표) -->
+      <div id="sheet-timetable" class="sheet-content">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-calendar-days"></i> 2026학년도 1학기 주간 시간표
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-sm btn-primary" id="btn-sync-timetable">
+              <i class="fa-solid fa-arrows-rotate"></i> 계획표 데이터와 동기화
+            </button>
+            <span class="toolbar-tip"><i class="fa-solid fa-circle-info"></i> '수강 과목 및 평가 계획표' 시트의 '요일 및 교시' 셀 정보가 자동으로 동기화됩니다.</span>
+          </div>
+        </div>
+
+        <div class="timetable-wrapper">
+          <table class="timetable-grid">
+            <thead>
+              <tr>
+                <th class="time-col">교시 / 시간</th>
+                <th>월요일 (MON)</th>
+                <th>화요일 (TUE)</th>
+                <th>수요일 (WED)</th>
+                <th>목요일 (THU)</th>
+                <th>금요일 (FRI)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-timetable">
+              <!-- Timetable rows for 1-9 periods (09:00 - 18:00) -->
+              <tr data-period="1">
+                <td class="time-label"><strong>1교시</strong><br>09:00 ~ 10:00</td>
+                <td data-day="월" data-period="1"></td>
+                <td data-day="화" data-period="1"></td>
+                <td data-day="수" data-period="1"></td>
+                <td data-day="목" data-period="1"></td>
+                <td data-day="금" data-period="1"></td>
+              </tr>
+              <tr data-period="2">
+                <td class="time-label"><strong>2교시</strong><br>10:00 ~ 11:00</td>
+                <td data-day="월" data-period="2"></td>
+                <td data-day="화" data-period="2"></td>
+                <td data-day="수" data-period="2"></td>
+                <td data-day="목" data-period="2"></td>
+                <td data-day="금" data-period="2"></td>
+              </tr>
+              <tr data-period="3">
+                <td class="time-label"><strong>3교시</strong><br>11:00 ~ 12:00</td>
+                <td data-day="월" data-period="3"></td>
+                <td data-day="화" data-period="3"></td>
+                <td data-day="수" data-period="3"></td>
+                <td data-day="목" data-period="3"></td>
+                <td data-day="금" data-period="3"></td>
+              </tr>
+              <tr data-period="4">
+                <td class="time-label"><strong>4교시</strong><br>12:00 ~ 13:00</td>
+                <td data-day="월" data-period="4"></td>
+                <td data-day="화" data-period="4"></td>
+                <td data-day="수" data-period="4"></td>
+                <td data-day="목" data-period="4"></td>
+                <td data-day="금" data-period="4"></td>
+              </tr>
+              <tr data-period="5">
+                <td class="time-label"><strong>5교시</strong><br>13:00 ~ 14:00</td>
+                <td data-day="월" data-period="5"></td>
+                <td data-day="화" data-period="5"></td>
+                <td data-day="수" data-period="5"></td>
+                <td data-day="목" data-period="5"></td>
+                <td data-day="금" data-period="5"></td>
+              </tr>
+              <tr data-period="6">
+                <td class="time-label"><strong>6교시</strong><br>14:00 ~ 15:00</td>
+                <td data-day="월" data-period="6"></td>
+                <td data-day="화" data-period="6"></td>
+                <td data-day="수" data-period="6"></td>
+                <td data-day="목" data-period="6"></td>
+                <td data-day="금" data-period="6"></td>
+              </tr>
+              <tr data-period="7">
+                <td class="time-label"><strong>7교시</strong><br>15:00 ~ 16:00</td>
+                <td data-day="월" data-period="7"></td>
+                <td data-day="화" data-period="7"></td>
+                <td data-day="수" data-period="7"></td>
+                <td data-day="목" data-period="7"></td>
+                <td data-day="금" data-period="7"></td>
+              </tr>
+              <tr data-period="8">
+                <td class="time-label"><strong>8교시</strong><br>16:00 ~ 17:00</td>
+                <td data-day="월" data-period="8"></td>
+                <td data-day="화" data-period="8"></td>
+                <td data-day="수" data-period="8"></td>
+                <td data-day="목" data-period="8"></td>
+                <td data-day="금" data-period="8"></td>
+              </tr>
+              <tr data-period="9">
+                <td class="time-label"><strong>9교시</strong><br>17:00 ~ 18:00</td>
+                <td data-day="월" data-period="9"></td>
+                <td data-day="화" data-period="9"></td>
+                <td data-day="수" data-period="9"></td>
+                <td data-day="목" data-period="9"></td>
+                <td data-day="금" data-period="9"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHEET 3: GPA Calculator (성적/학점 계산기) -->
+      <div id="sheet-gpa" class="sheet-content">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-calculator"></i> 예상 학점 및 평점(GPA) 계산기
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-sm btn-success" id="btn-add-gpa-row">
+              <i class="fa-solid fa-plus"></i> 과목 추가
+            </button>
+            <button class="btn-sm btn-danger" id="btn-delete-gpa-row">
+              <i class="fa-solid fa-trash-can"></i> 선택 행 삭제
+            </button>
+            <div class="gpa-standard-wrapper">
+              <label for="gpa-standard">만점 기준:</label>
+              <select id="gpa-standard" class="control-select-sm">
+                <option value="4.5">4.5 만점 (일반 대학)</option>
+                <option value="4.3">4.3 만점 (일부 대학)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="excel-table" id="table-gpa">
+            <thead>
+              <tr class="header-letters">
+                <th class="row-num-col"></th>
+                <th style="width: 50px;">No</th>
+                <th style="width: 250px;">과목명</th>
+                <th style="width: 130px;">이수구분</th>
+                <th style="width: 90px;">학점 (Credits)</th>
+                <th style="width: 110px;">성적등급 (Grade)</th>
+                <th style="width: 110px;">과목 평점 (GP)</th>
+                <th style="width: 110px;">Pass/Fail 여부</th>
+                <th>비고 (목표 성적 또는 각오)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-gpa">
+              <!-- GPA rows -->
+            </tbody>
+            <tfoot>
+              <tr class="summary-row">
+                <td></td>
+                <td colspan="3" style="text-align: right; font-weight: bold; padding-right: 15px;">합계 / 평균 평점:</td>
+                <td id="gpa-total-credits" style="font-weight: bold; text-align: center;">0</td>
+                <td></td>
+                <td id="gpa-avg-gpa" style="font-weight: bold; text-align: center; color: var(--excel-green-dark);">0.00</td>
+                <td></td>
+                <td style="font-style: italic; color: #7f8c8d; font-size: 0.85rem;" id="gpa-summary-note">학점을 모두 채우고 훌륭한 학기를 보내보세요! 🚀</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- SHEET 4: Freshman Bucketlist & Notes (새내기 라이프) -->
+      <div id="sheet-checklist" class="sheet-content">
+        <div class="sheet-toolbar">
+          <div class="toolbar-title">
+            <i class="fa-solid fa-heart-circle-check"></i> 26학번 새내기 버킷리스트 & 개인 메모
+          </div>
+          <div class="toolbar-tip"><i class="fa-solid fa-wand-magic-sparkles"></i> 1학년 때 꼭 해보고 싶은 미션을 클릭해 달성해 보세요! 오른쪽 메모장은 마크다운과 텍스트 필기로 쓸 수 있는 자유 공간입니다.</div>
+        </div>
+
+        <div class="flex-layout">
+          <!-- Bucket List Panel (Excel grid style) -->
+          <div class="bucket-list-panel">
+            <div class="panel-header">
+              <i class="fa-solid fa-list-check"></i> 신입생 낭만 버킷리스트 10선
+            </div>
+            <table class="excel-table" id="table-bucket">
+              <thead>
+                <tr class="header-letters">
+                  <th class="row-num-col"></th>
+                  <th style="width: 80px;">달성 여부</th>
+                  <th style="width: 40px;">No</th>
+                  <th>미션 내용</th>
+                  <th style="width: 120px;">달성 날짜</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-bucket">
+                <!-- Statically generated bucket list rows with checkbox -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Free Note Panel -->
+          <div class="notes-panel">
+            <div class="panel-header">
+              <span><i class="fa-solid fa-pen-clip"></i> 새내기 비밀 메모장 (Auto-saved)</span>
+              <span class="save-status" id="notes-save-status"><i class="fa-solid fa-cloud-arrow-up"></i> 자동 저장됨</span>
+            </div>
+            <textarea id="free-notes" placeholder="여기에 오늘의 할 일, 교수님 면담 내용, 동아리 정보 등을 마음껏 기록해 보세요... ✍️"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Excel-style Bottom Sheet Tabs Bar -->
+    <footer class="sheet-tabs-bar">
+      <!-- Scroll indicator arrows -->
+      <div class="tabs-scroll-btn left"><i class="fa-solid fa-chevron-left"></i></div>
+      
+      <!-- Excel Sheet Tabs -->
+      <div class="sheet-tabs-container">
+        <div class="sheet-tab active" data-target="sheet-syllabus" tabindex="0">
+          <i class="fa-solid fa-table logo-icon"></i>
+          <span>수강과목 및 평가계획</span>
+        </div>
+        <div class="sheet-tab" data-target="sheet-timetable" tabindex="0">
+          <i class="fa-solid fa-calendar logo-icon"></i>
+          <span>강의 시간표</span>
+        </div>
+        <div class="sheet-tab" data-target="sheet-gpa" tabindex="0">
+          <i class="fa-solid fa-calculator logo-icon"></i>
+          <span>학점 계산기</span>
+        </div>
+        <div class="sheet-tab" data-target="sheet-checklist" tabindex="0">
+          <i class="fa-solid fa-heart logo-icon"></i>
+          <span>새내기 라이프</span>
+        </div>
+      </div>
+
+      <div class="tabs-scroll-btn right"><i class="fa-solid fa-chevron-right"></i></div>
+      
+      <!-- Excel-like Status Bar info -->
+      <div class="status-bar-info">
+        <div class="status-indicator">
+          <span class="status-dot green"></span>
+          <span>준비 완료 (Ready)</span>
+        </div>
+        <div class="keyboard-tip">
+          <span>더블클릭: 편집 | Esc: 취소 | Enter: 저장</span>
+        </div>
+        <div class="version-label">
+          <span>Excel v2026.1.0</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Custom Context Menu or cell editor container if needed -->
+  <!-- Simple popup modal for importing data -->
+  <div class="modal-overlay" id="modal-import-confirm">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-triangle-exclamation"></i> 데이터 불러오기 경고</h3>
+      <p>기존에 작성 중이던 모든 데이터가 지워지고 불러온 파일의 데이터로 대체됩니다. 계속하시겠습니까?</p>
+      <div class="modal-actions">
+        <button id="btn-import-confirm" class="btn btn-primary">예, 불러옵니다</button>
+        <button id="btn-import-cancel" class="btn btn-secondary">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
